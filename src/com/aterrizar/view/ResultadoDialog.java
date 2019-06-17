@@ -1,6 +1,6 @@
 package com.aterrizar.view;
 
-import com.aterrizar.mode.util.operation.ResultadoOperacion;
+import com.aterrizar.model.util.operation.ResultadoOperacion;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

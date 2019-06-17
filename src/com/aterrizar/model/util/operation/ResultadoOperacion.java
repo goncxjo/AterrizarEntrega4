@@ -1,4 +1,4 @@
-package com.aterrizar.mode.util.operation;
+package com.aterrizar.model.util.operation;
 
 public abstract class ResultadoOperacion {
 
@@ -20,5 +20,15 @@ public abstract class ResultadoOperacion {
         return this.estaOK;
     }
 
-    public abstract String getResultado();
+    public String getResultado() {
+        if (this.estaOK) {
+            return getMensajeOK();
+        } else {
+            return getMensajeError();
+        }
+    }
+
+    protected abstract String getMensajeOK();
+
+    protected abstract String getMensajeError();
 }
