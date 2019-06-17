@@ -39,6 +39,8 @@ public class AsientosView extends LayoutView {
         setAsientosPanel();
         setBotonesPanel();
 
+        //TODO: implementar validaciones de búsqueda
+        //TODO: implementar acciones para búsqueda, comprar y reservar
         cerrarButton.addActionListener(e -> onCerrar());
     }
 
