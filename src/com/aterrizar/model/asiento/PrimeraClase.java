@@ -11,6 +11,11 @@ public class PrimeraClase extends Asiento {
     public PrimeraClase(String codigoAsiento, double precio, Ubicacion ubicacion, Estado estado) {
         super(codigoAsiento, precio, ubicacion, estado);
     }
+
+    @Override
+    public String toString() {
+        return "Primera Clase";
+    }
 }
 
 

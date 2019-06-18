@@ -8,6 +8,7 @@ import com.aterrizar.model.Vuelo;
 import com.aterrizar.model.asiento.Asiento;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.util.date.DateHelper;
+import com.aterrizar.model.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 
@@ -59,7 +60,7 @@ public abstract class Aerolinea {
         return this;
     }
 
-    private void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException {
+    private void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException {
         Destino origen = filtro.getOrigen();
         Destino destino = filtro.getDestino();
         String fecha = filtro.getFecha();
@@ -73,6 +74,9 @@ public abstract class Aerolinea {
         if(fecha == null || fecha.equals("")) {
             throw new ParametroVacioException("La fecha no puede estar vacía");
         }
+
+        // Probamos si arroja excepción
+        DateHelper.parseToDate(filtro.getFecha());
     }
 
     private List<VueloAsiento> mapear(List<Object> asientosDisponibles, VueloAsientoFiltro filtro, Usuario usuario) {

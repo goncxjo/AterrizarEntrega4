@@ -1,6 +1,11 @@
 package com.aterrizar.view;
 
 import com.aterrizar.controller.AsientosController;
+import com.aterrizar.enumerator.Destino;
+import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.model.util.date.PatternDoesntMatchException;
+import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
+import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
 import com.aterrizar.viewmodel.AsientoTableModel;
 
 import javax.swing.*;
@@ -10,6 +15,7 @@ import java.util.ArrayList;
 
 public class AsientosView extends LayoutView {
 
+    AsientosController controller;
     private final JPanel errorPanel = new JPanel();
     private final JPanel asientosPanel = new JPanel();
     private final JPanel filtrosPanel = new JPanel();
@@ -17,11 +23,12 @@ public class AsientosView extends LayoutView {
     private final JPanel botonesPanel = new JPanel();
 
     private final JLabel errorLabel = new JLabel("");
-    private final JLabel origenLabel = new JLabel("Origen: ", JLabel.TRAILING);
-    private final JLabel destinoLabel = new JLabel("Destino: ", JLabel.TRAILING);
-    private final JLabel fechaLabel = new JLabel("Fecha: ", JLabel.TRAILING);
-    private final JTextField origenTextField = new JTextField();
-    private final JTextField destinoTextField = new JTextField();
+    private final JLabel origenLabel = new JLabel("Origen: ");
+    private final JLabel destinoLabel = new JLabel("Destino: ");
+    private final JLabel fechaLabel = new JLabel("Fecha: ");
+
+    private JComboBox origenComboBox;
+    private JComboBox destinoComboBox;
     private final JTextField fechaTextField = new JTextField();
 
     private final JTable resultadosTabla = new JTable();
@@ -32,16 +39,34 @@ public class AsientosView extends LayoutView {
     private final JButton cerrarButton = new JButton("Cerrar");
 
     public AsientosView(AsientosController controller) throws HeadlessException {
-        super(controller.getTitulo());
-        setSize(WIDTH, HEIGHT + 200);
+        super(controller.getTitulo(), WIDTH, HEIGHT + 200);
 
+        this.controller = controller;
         setErrorPanel();
         setAsientosPanel();
         setBotonesPanel();
 
         //TODO: implementar validaciones de búsqueda
-        //TODO: implementar acciones para búsqueda, comprar y reservar
+        buscarButton.addActionListener(e -> onBuscarAsientos());
+        //TODO: implementar acciones para comprar y reservar
+        //comprarButton.addActionListener(e -> onComprar());
+        //reservarButton.addActionListener(e -> onReservar());
         cerrarButton.addActionListener(e -> onCerrar());
+    }
+
+    private void onBuscarAsientos() {
+        try {
+            errorLabel.setText("");
+            VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+                    .agregarOrigen((Destino) origenComboBox.getSelectedItem())
+                    .agregarDestino((Destino) destinoComboBox.getSelectedItem())
+                    .agregarFecha(fechaTextField.getText())
+                    .build();
+
+            resultadosTabla.setModel(new AsientoTableModel(controller.getAsientoDisponibles(filtro)));
+        } catch(ParametroVacioException | PatternDoesntMatchException e) {
+            errorLabel.setText(e.getMessage());
+        }
     }
 
     private void setBotonesPanel() {
@@ -89,8 +114,8 @@ public class AsientosView extends LayoutView {
         c.gridy = 0;
         c.gridwidth = 2;
         c.insets = new Insets(0,0,0,0);
-        filtrosPanel.add(origenTextField, c);
-        origenTextField.setColumns(20);
+        origenComboBox = getComboBoxDestinos();
+        filtrosPanel.add(origenComboBox, c);
 
         c.gridx = 0;
         c.gridy = 1;
@@ -102,8 +127,8 @@ public class AsientosView extends LayoutView {
         c.gridy = 1;
         c.gridwidth = 2;
         c.insets = new Insets(0,0,0,0);
-        filtrosPanel.add(destinoTextField, c);
-        destinoTextField.setColumns(20);
+        destinoComboBox = getComboBoxDestinos();
+        filtrosPanel.add(destinoComboBox, c);
 
         c.gridx = 0;
         c.gridy = 2;
@@ -128,6 +153,13 @@ public class AsientosView extends LayoutView {
         asientosPanel.add(filtrosPanel);
     }
 
+    private JComboBox getComboBoxDestinos() {
+        JComboBox jComboBox = new JComboBox();
+        jComboBox.setModel(new DefaultComboBoxModel(Destino.values()));
+        jComboBox.setBackground(Color.WHITE);
+        return jComboBox;
+    }
+
     private void setErrorPanel() {
         errorPanel.setLayout(new GridLayout(0, 1));
         errorPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -137,6 +169,7 @@ public class AsientosView extends LayoutView {
         contentPane.add(errorPanel, BorderLayout.NORTH);
 
         errorPanel.add(errorLabel);
+        errorLabel.setForeground(Color.RED);
     }
 
     private void onCerrar() {

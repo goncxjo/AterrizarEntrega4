@@ -20,7 +20,7 @@ public class DateHelper {
      * @param textDate texto que representa una fecha
      * @return objeto Date con la fecha indicada en @textDate
      * */
-    public static Date parseToDate(String textDate) {
+    public static Date parseToDate(String textDate) throws PatternDoesntMatchException {
         DatePattern datePattern = matchDatePattern(textDate);
         return datePattern.parse(textDate);
     }

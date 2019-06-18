@@ -19,9 +19,9 @@ public class LayoutView extends JFrame {
         super(title);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(WIDTH, HEIGHT);
         setResizable(false);
-        centrar();
+        setSize(WIDTH, HEIGHT);
+        centrarVentana();
 
         contentPane = new JPanel();
         contentPane.setBorder(EMPTY_BORDER);
@@ -30,7 +30,22 @@ public class LayoutView extends JFrame {
         setContentPane(contentPane);
     }
 
-    private void centrar() {
+    public LayoutView(String title, int width, int height) throws HeadlessException {
+        super(title);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setSize(width, height);
+        centrarVentana();
+
+        contentPane = new JPanel();
+        contentPane.setBorder(EMPTY_BORDER);
+        contentPane.setLayout(new BorderLayout());
+
+        setContentPane(contentPane);
+    }
+
+    public void centrarVentana() {
         Dimension windowSize = getSize();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Point centerPoint = ge.getCenterPoint();

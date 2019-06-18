@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class BienvenidaView extends LayoutView {
 
+    private final BienvenidaController controller;
     private final JPanel textPanel;
     private final JPanel buttonPanel;
     private final JLabel usuarioLabel;
@@ -17,8 +18,8 @@ public class BienvenidaView extends LayoutView {
     private final JButton buscarAsientosButton;
 
     public BienvenidaView(BienvenidaController controller) throws HeadlessException {
-        super(controller.getTitulo());
-        setSize(WIDTH, HEIGHT - 100);
+        super(controller.getTitulo(), WIDTH, HEIGHT - 100);
+        this.controller = controller;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

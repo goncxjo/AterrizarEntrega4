@@ -1,8 +1,10 @@
 package com.aterrizar.controller;
 
+import com.aterrizar.DummyData;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
+import com.aterrizar.model.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 import com.aterrizar.view.AsientosView;
 import com.aterrizar.viewmodel.AsientoViewModel;
@@ -18,6 +20,7 @@ public class AsientosController extends Controller {
 
     public AsientosController(Usuario modelo) {
         this.modelo = modelo;
+        this.repositorio = DummyData.getRepositorio();
     }
 
     public void iniciar() {
@@ -25,19 +28,17 @@ public class AsientosController extends Controller {
         mostrarVista();
     }
 
-    public List<AsientoViewModel> getAsientoDisponibles(VueloAsientoFiltro filtro) throws ParametroVacioException {
+    public List<AsientoViewModel> getAsientoDisponibles(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException {
         List<AsientoViewModel> vuelosDisponibles = new ArrayList<>();
 
-        if(filtro != null) {
-            vuelosDisponibles.addAll(repositorio.getVueloAsientos(filtro, this.modelo).stream().map(x -> new AsientoViewModel(
-                    x.getNombreAerolinea()
-                    , x.getAsiento().getCodigoAsiento()
-                    , x.getAsiento().getNumeroAsiento()
-                    , x.getAsiento().getPrecio()
-                    , x.getAsiento().getUbicacion().toString()
-                    , ""
-            )).collect(Collectors.toList()));
-        }
+        vuelosDisponibles.addAll(repositorio.getVueloAsientos(filtro, this.modelo).stream().map(x -> new AsientoViewModel(
+                x.getNombreAerolinea()
+                , x.getAsiento().getCodigoAsiento()
+                , x.getAsiento().getNumeroAsiento()
+                , x.getAsiento().getPrecio()
+                , x.getAsiento().getUbicacion().toString()
+                , x.getAsiento().toString()
+        )).collect(Collectors.toList()));
 
         return vuelosDisponibles;
     }

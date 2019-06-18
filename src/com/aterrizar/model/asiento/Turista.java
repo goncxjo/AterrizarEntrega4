@@ -10,4 +10,9 @@ public class Turista extends Asiento {
     public Turista(String codigoAsiento, double precio, Ubicacion ubicacion, Estado estado) {
         super(codigoAsiento, precio, ubicacion, estado);
     }
+
+    @Override
+    public String toString() {
+        return "Turismo";
+    }
 }

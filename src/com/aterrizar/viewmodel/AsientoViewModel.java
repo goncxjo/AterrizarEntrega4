@@ -1,7 +1,5 @@
 package com.aterrizar.viewmodel;
 
-import java.util.Date;
-
 public class AsientoViewModel {
     private String nombreAerolinea;
     private String codigoVuelo;

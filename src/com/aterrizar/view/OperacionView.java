@@ -7,26 +7,21 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class OperacionView extends JFrame {
+public class OperacionView extends LayoutView {
 
-    private final JPanel contentPane;
+    private final OperacionController controller;
     private final JPanel textPanel;
     private final JPanel operacionesPanel;
     private final JPanel buttonPanel;
     private final JLabel usuarioLabel;
     private final JTable operacionesTabla;
-    private final JButton cerrarButton;
+    private final JButton cerrarButton = new JButton("Cerrar");
 
     public OperacionView(OperacionController controller) throws HeadlessException {
-        super(controller.getTitulo());
+        super(controller.getTitulo(), WIDTH, HEIGHT + 200);
+        this.controller = controller;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(200, 200, 500, 300);
-
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-        contentPane.setLayout(new BorderLayout());
-        setContentPane(contentPane);
 
         textPanel = new JPanel();
         textPanel.setLayout(new GridLayout(0, 1));
@@ -48,9 +43,6 @@ public class OperacionView extends JFrame {
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(0,3,15,0));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        cerrarButton = new JButton("Cerrar");
-        buttonPanel.add(cerrarButton);
 
         cerrarButton.addActionListener(e -> onCerrar());
     }

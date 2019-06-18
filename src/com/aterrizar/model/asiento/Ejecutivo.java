@@ -11,4 +11,9 @@ public class Ejecutivo extends Asiento {
     public Ejecutivo(String codigoAsiento, double precio, Ubicacion ubicacion, Estado estado) {
         super(codigoAsiento, precio, ubicacion, estado);
     }
+
+    @Override
+    public String toString() {
+        return "Ejecutivo";
+    }
 }
