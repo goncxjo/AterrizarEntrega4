@@ -3,10 +3,10 @@ package com.aterrizar.view;
 import com.aterrizar.controller.AsientosController;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.util.date.PatternDoesntMatchException;
-import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
-import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
 import com.aterrizar.viewmodel.AsientoTableModel;
+import com.aterrizar.viewmodel.BusquedaAsientoViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public class AsientosView extends LayoutView {
 
     AsientosController controller;
+    BusquedaAsientoViewModel vm;
+
     private final JPanel errorPanel = new JPanel();
     private final JPanel asientosPanel = new JPanel();
     private final JPanel filtrosPanel = new JPanel();
@@ -38,10 +40,13 @@ public class AsientosView extends LayoutView {
     private final JButton reservarButton = new JButton("Reservar");
     private final JButton cerrarButton = new JButton("Cerrar");
 
-    public AsientosView(AsientosController controller) throws HeadlessException {
+    public AsientosView(AsientosController controller, Usuario usuario) throws HeadlessException {
         super(controller.getTitulo(), WIDTH, HEIGHT + 200);
 
         this.controller = controller;
+        this.vm = new BusquedaAsientoViewModel();
+        this.vm.setUsuario(usuario);
+
         setErrorPanel();
         setAsientosPanel();
         setBotonesPanel();
@@ -57,13 +62,10 @@ public class AsientosView extends LayoutView {
     private void onBuscarAsientos() {
         try {
             errorLabel.setText("");
-            VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
-                    .agregarOrigen((Destino) origenComboBox.getSelectedItem())
-                    .agregarDestino((Destino) destinoComboBox.getSelectedItem())
-                    .agregarFecha(fechaTextField.getText())
-                    .build();
 
-            resultadosTabla.setModel(new AsientoTableModel(controller.getAsientoDisponibles(filtro)));
+            vm.setFiltro((Destino) origenComboBox.getSelectedItem(), (Destino) destinoComboBox.getSelectedItem(), fechaTextField.getText());
+
+            resultadosTabla.setModel(new AsientoTableModel(vm.getVueloAsientos()));
         } catch(ParametroVacioException | PatternDoesntMatchException e) {
             errorLabel.setText(e.getMessage());
         }
