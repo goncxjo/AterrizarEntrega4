@@ -2,7 +2,7 @@ package com.aterrizar.viewmodel;
 
 import com.aterrizar.model.usuario.Usuario;
 
-public class UsuarioViewModel {
+public class BienvenidaViewModel {
     private Usuario usuario;
 
     public Usuario getUsuario() {

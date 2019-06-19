@@ -40,7 +40,7 @@ public class Repositorio {
 
         try {
             comunicador.reservar(codigoAsiento, usuario.getDNI());
-            usuario.reservar(codigoAsiento);
+            usuario.reservar(vueloAsiento);
         } catch (AsientoYaReservadoException e) {
             agregarSobreReserva(vueloAsiento, usuario);
         }
@@ -49,13 +49,13 @@ public class Repositorio {
     public List<Reserva> getListaEspera(String codigoAsiento) {
         return listaEspera
                 .stream()
-                .filter(x -> x.getCodigoAsiento().equals(codigoAsiento))
+                .filter(x -> x.getVueloAsiento().getAsiento().getCodigoAsiento().equals(codigoAsiento))
                 .sorted(Comparator.comparing(Reserva::getFechaReserva))
                 .collect(Collectors.toList());
     }
 
     private void agregarSobreReserva(VueloAsiento vueloAsiento, Usuario usuario) {
-        listaEspera.add(new Reserva(vueloAsiento.getAsiento().getCodigoAsiento(), usuario));
+        listaEspera.add(new Reserva(vueloAsiento, usuario));
     }
 
     private void eliminarSobreReservas(String codigoAsiento) {
@@ -64,7 +64,7 @@ public class Repositorio {
 
     public void transferir(Reserva reserva) {
         Usuario usuario = reserva.getUsuario();
-        List<Reserva> listaEsperaPorCodigoAsiento = getListaEspera(reserva.getCodigoAsiento());
+        List<Reserva> listaEsperaPorCodigoAsiento = getListaEspera(reserva.getVueloAsiento().getAsiento().getCodigoAsiento());
 
         if(!listaEsperaPorCodigoAsiento.isEmpty()) {
             Reserva reservaEnEspera = listaEsperaPorCodigoAsiento.get(0);

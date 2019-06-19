@@ -83,20 +83,20 @@ public abstract class Usuario {
         return reservas;
     }
 
-    public void reservar(String codigoAsiento) {
-        this.reservas.add(new Reserva(codigoAsiento, this));
+    public void reservar(VueloAsiento vueloAsiento) {
+        this.reservas.add(new Reserva(vueloAsiento, this));
     }
 
     private void eliminarReserva(String codigoAsiento) {
-        this.reservas.removeIf(x -> x.getCodigoAsiento().equals(codigoAsiento));
+        this.reservas.removeIf(x -> x.getVueloAsiento().getAsiento().getCodigoAsiento().equals(codigoAsiento));
     }
 
     public void eliminar(Reserva reserva) {
-        eliminarReserva(reserva.getCodigoAsiento());
+        eliminarReserva(reserva.getVueloAsiento().getAsiento().getCodigoAsiento());
     }
 
     public void transferir(Reserva reserva, Usuario otroUsuario) {
-        eliminarReserva(reserva.getCodigoAsiento());
-        otroUsuario.reservar(reserva.getCodigoAsiento());
+        eliminarReserva(reserva.getVueloAsiento().getAsiento().getCodigoAsiento());
+        otroUsuario.reservar(reserva.getVueloAsiento());
     }
 }

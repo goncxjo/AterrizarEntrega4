@@ -1,15 +1,13 @@
 package com.aterrizar.view;
 
-import com.aterrizar.controller.OperacionController;
 import com.aterrizar.viewmodel.OperacionTableModel;
+import com.aterrizar.viewmodel.UsuarioOperacionViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public abstract class OperacionView extends LayoutView {
-
-    protected OperacionController controller;
+public class VerOperacionView extends LayoutView {
 
     protected final JPanel textPanel = new JPanel();
     protected final JPanel operacionesPanel = new JPanel();
@@ -18,7 +16,7 @@ public abstract class OperacionView extends LayoutView {
     protected final JTable operacionesTabla = new JTable();;
     protected final JButton cerrarButton = new JButton("Cerrar");
 
-    public OperacionView() throws HeadlessException {
+    public VerOperacionView(UsuarioOperacionViewModel vm) throws HeadlessException {
         super();
 
         textPanel.setLayout(new GridLayout(0, 1));
@@ -32,7 +30,7 @@ public abstract class OperacionView extends LayoutView {
         contentPane.add(operacionesPanel, BorderLayout.CENTER);
 
         operacionesPanel.add(new JScrollPane(operacionesTabla));
-        operacionesTabla.setModel(new OperacionTableModel(controller.getOperacionesUsuario()));
+        operacionesTabla.setModel(new OperacionTableModel(vm));
 
         buttonPanel.setLayout(new GridLayout(0,3,15,0));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);

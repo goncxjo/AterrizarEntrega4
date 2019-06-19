@@ -1,22 +1,22 @@
 package com.aterrizar.view;
 
-import com.aterrizar.controller.AsientosController;
+import com.aterrizar.controller.BuscarAsientoController;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.util.date.PatternDoesntMatchException;
 import com.aterrizar.viewmodel.AsientoTableModel;
-import com.aterrizar.viewmodel.BusquedaAsientoViewModel;
+import com.aterrizar.viewmodel.BuscarAsientoViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class AsientosView extends LayoutView {
+public class BuscarAsientoView extends LayoutView {
 
-    AsientosController controller;
-    BusquedaAsientoViewModel vm;
+    BuscarAsientoController controller;
+    BuscarAsientoViewModel vm;
 
     private final JPanel errorPanel = new JPanel();
     private final JPanel asientosPanel = new JPanel();
@@ -40,12 +40,9 @@ public class AsientosView extends LayoutView {
     private final JButton reservarButton = new JButton("Reservar");
     private final JButton cerrarButton = new JButton("Cerrar");
 
-    public AsientosView(AsientosController controller, Usuario usuario) throws HeadlessException {
-        super(controller.getTitulo(), WIDTH, HEIGHT + 200);
-
-        this.controller = controller;
-        this.vm = new BusquedaAsientoViewModel();
-        this.vm.setUsuario(usuario);
+    public BuscarAsientoView(Usuario usuario) throws HeadlessException {
+        super(WIDTH, HEIGHT + 200);
+        crearController(usuario);
 
         setErrorPanel();
         setAsientosPanel();
@@ -59,16 +56,31 @@ public class AsientosView extends LayoutView {
         cerrarButton.addActionListener(e -> onCerrar());
     }
 
+    private void crearController(Usuario usuario) {
+        this.controller = new BuscarAsientoController();
+        this.vm = controller.getModelo();
+        this.vm.setUsuario(usuario);
+
+    }
+
     private void onBuscarAsientos() {
         try {
-            errorLabel.setText("");
+            resetear();
 
-            vm.setFiltro((Destino) origenComboBox.getSelectedItem(), (Destino) destinoComboBox.getSelectedItem(), fechaTextField.getText());
-
+            vm.setFiltro(
+                    (Destino) origenComboBox.getSelectedItem()
+                    , (Destino) destinoComboBox.getSelectedItem()
+                    , fechaTextField.getText()
+            );
+            vm.buscarAsientosDisponibles();
             resultadosTabla.setModel(new AsientoTableModel(vm.getVueloAsientos()));
         } catch(ParametroVacioException | PatternDoesntMatchException e) {
             errorLabel.setText(e.getMessage());
         }
+    }
+
+    private void resetear() {
+        errorLabel.setText("");
     }
 
     private void setBotonesPanel() {
@@ -172,9 +184,5 @@ public class AsientosView extends LayoutView {
 
         errorPanel.add(errorLabel);
         errorLabel.setForeground(Color.RED);
-    }
-
-    private void onCerrar() {
-        dispose();
     }
 }

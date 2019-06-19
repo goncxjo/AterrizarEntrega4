@@ -5,6 +5,7 @@ import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
+import com.aterrizar.model.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
@@ -46,7 +47,7 @@ public class BuscarAsientoViewModel {
                 .build();
     }
 
-    public void buscarAsientosDisponibles() throws ParametroVacioException {
+    public void buscarAsientosDisponibles() throws ParametroVacioException, PatternDoesntMatchException {
         this.vueloAsientos = repositorio.getVueloAsientos(filtro, usuario);
     }
 

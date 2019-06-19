@@ -6,13 +6,21 @@ import java.util.Date;
 
 public class Reserva {
     private Date fechaReserva;
-    private String codigoAsiento;
     private Usuario usuario;
+    private VueloAsiento vueloAsiento;
 
-    public Reserva(String codigoAsiento, Usuario usuario) {
+    public Reserva(VueloAsiento vueloAsiento, Usuario usuario) {
         this.fechaReserva = new Date();
         this.usuario = usuario;
-        this.codigoAsiento = codigoAsiento;
+        this.vueloAsiento = vueloAsiento;
+    }
+
+    public Date getFechaReserva() {
+        return fechaReserva;
+    }
+
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 
     public Usuario getUsuario() {
@@ -23,11 +31,11 @@ public class Reserva {
         this.usuario = usuario;
     }
 
-    public String getCodigoAsiento() {
-        return codigoAsiento;
+    public VueloAsiento getVueloAsiento() {
+        return vueloAsiento;
     }
 
-    public Date getFechaReserva() {
-        return fechaReserva;
+    public void setVueloAsiento(VueloAsiento vueloAsiento) {
+        this.vueloAsiento = vueloAsiento;
     }
 }

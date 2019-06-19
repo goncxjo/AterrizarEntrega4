@@ -1,10 +1,12 @@
 package com.aterrizar.viewmodel;
 
+import com.aterrizar.model.vueloasiento.VueloAsiento;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class AsientoTableModel extends AbstractTableModel {
-    List<AsientoViewModel> asientosList;
+    List<VueloAsiento> asientosList;
     String[] headerList = {
             "Aerolinea"
             , "Vuelo"
@@ -16,11 +18,11 @@ public class AsientoTableModel extends AbstractTableModel {
 
     Class[] classes = { String.class, String.class, String.class, Double.class, String.class, String.class };
 
-    public AsientoTableModel(List<AsientoViewModel> list) {
+    public AsientoTableModel(List<VueloAsiento> list) {
         asientosList = list;
     }
 
-    public AsientoViewModel obtener(int index) {
+    public VueloAsiento obtener(int index) {
         try {
             return asientosList.get(index);
         } catch (IndexOutOfBoundsException e) {
@@ -31,22 +33,24 @@ public class AsientoTableModel extends AbstractTableModel {
     // this method is called to set the value of each cell
     @Override
     public Object getValueAt(int row, int column) {
-        AsientoViewModel entity = null;
+        VueloAsiento entity = null;
         entity = asientosList.get(row);
 
         switch (column) {
             case 0:
                 return entity.getNombreAerolinea();
             case 1:
-                return entity.getCodigoVuelo();
+                String codigoVuelo = entity.getAsiento().getCodigoAsiento().split("-")[0];
+                return codigoVuelo;
             case 2:
-                return entity.getNroAsiento();
+                String nroAsiento = entity.getAsiento().getCodigoAsiento().split("-")[1];
+                return nroAsiento;
             case 3:
-                return entity.getPrecioAsiento();
+                return entity.getAsiento().getPrecio();
             case 4:
-                return entity.getUbicacion();
+                return entity.getAsiento().getUbicacion();
             case 5:
-                return entity.getClase();
+                return entity.getAsiento().toString();
             default:
                 return "";
         }

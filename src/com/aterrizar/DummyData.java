@@ -52,7 +52,7 @@ public class DummyData {
         usuario.comprar(va1);
         usuario.comprar(va2);
 
-        usuario.reservar(va3.getAsiento().getCodigoAsiento());
+        usuario.reservar(va3);
 
         return usuario;
     }

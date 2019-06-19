@@ -1,41 +1,19 @@
 package com.aterrizar.controller;
 
-import com.aterrizar.model.usuario.Usuario;
-import com.aterrizar.view.BienvenidaView;
+import com.aterrizar.viewmodel.BienvenidaViewModel;
 
-public class BienvenidaController extends Controller {
-    private Usuario modelo;
+public class BienvenidaController {
+    private BienvenidaViewModel modelo;
 
-    public BienvenidaController(Usuario modelo) {
-        this.modelo = modelo;
+    public BienvenidaController() {
+        this.modelo = new BienvenidaViewModel();
     }
 
-    public Usuario getModelo() {
+    public BienvenidaViewModel getModelo() {
         return modelo;
     }
 
-    public void setModelo(Usuario modelo) {
+    public void setModelo(BienvenidaViewModel modelo) {
         this.modelo = modelo;
-    }
-
-    @Override
-    public void iniciar() {
-        this.vista = new BienvenidaView(this);
-        mostrarVista();
-    }
-
-    public void mostrarCompras() {
-        OperacionController operacionController = new ComprasController(this.modelo);
-        operacionController.iniciar();
-    }
-
-    public void mostrarReservas() {
-        OperacionController operacionController = new ReservasController(this.modelo);
-        operacionController.iniciar();
-    }
-
-    public void mostrarBusquedaAsientos() {
-        AsientosController asientosController = new AsientosController(this.modelo);
-        asientosController.iniciar();
     }
 }

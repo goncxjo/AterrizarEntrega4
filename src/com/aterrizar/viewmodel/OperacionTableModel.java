@@ -1,13 +1,14 @@
 package com.aterrizar.viewmodel;
 
 import com.aterrizar.model.util.date.DateHelper;
+import com.aterrizar.model.vueloasiento.VueloAsiento;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class OperacionTableModel extends AbstractTableModel {
 
-    List<OperacionViewModel> operacionesList;
+    List<VueloAsiento> operacionesList;
     String[] headerList = {
             "Salida"
             , "Aerolinea"
@@ -18,11 +19,12 @@ public class OperacionTableModel extends AbstractTableModel {
 
     Class[] classes = { String.class, String.class, String.class, String.class, Double.class };
 
-    public OperacionTableModel(List<OperacionViewModel> list) {
-        operacionesList = list;
+    public OperacionTableModel(UsuarioOperacionViewModel vm) {
+        vm.buscarOperacionesUsuario();
+        operacionesList = vm.getVueloAsientos();
     }
 
-    public OperacionViewModel obtener(int index) {
+    public VueloAsiento obtener(int index) {
         try {
             return operacionesList.get(index);
         } catch (IndexOutOfBoundsException e) {
@@ -34,20 +36,22 @@ public class OperacionTableModel extends AbstractTableModel {
     // this method is called to set the value of each cell
     @Override
     public Object getValueAt(int row, int column) {
-        OperacionViewModel entity = null;
+        VueloAsiento entity = null;
         entity = operacionesList.get(row);
 
         switch (column) {
             case 0:
-                return DateHelper.parseToString(entity.getFechaSalida(), "dd/MM/yyyy");
+                return DateHelper.parseToString(entity.getVuelo().getFecha(), "dd/MM/yyyy");
             case 1:
                 return entity.getNombreAerolinea();
             case 2:
-                return entity.getCodigoVuelo();
+                String codigoVuelo = entity.getAsiento().getCodigoAsiento().split("-")[0];
+                return codigoVuelo;
             case 3:
-                return entity.getNroAsiento();
+                String nroAsiento = entity.getAsiento().getCodigoAsiento().split("-")[1];
+                return nroAsiento;
             case 4:
-                return entity.getPrecioAsiento();
+                return entity.getAsiento().getPrecio();
             default:
                 return "";
         }
