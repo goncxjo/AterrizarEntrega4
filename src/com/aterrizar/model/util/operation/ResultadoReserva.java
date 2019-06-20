@@ -1,17 +1,19 @@
 package com.aterrizar.model.util.operation;
 
+import com.aterrizar.model.vueloasiento.VueloAsiento;
+
 public class ResultadoReserva extends ResultadoOperacion {
 
     public ResultadoReserva(String error) {
         super(error);
     }
 
-    public ResultadoReserva(Object resultado) {
-        super(resultado);
+    public ResultadoReserva(VueloAsiento vueloAsiento) {
+        super(vueloAsiento);
     }
 
     protected String getMensajeOK() {
-        return "El asiento " + resultado.toString() + " ha sido reservado exitosamente!";
+        return "El asiento " + vueloAsiento.getAsiento().getCodigoAsiento() + " ha sido reservado exitosamente!";
     }
 
     protected String getMensajeError() {

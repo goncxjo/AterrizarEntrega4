@@ -2,9 +2,14 @@ package com.aterrizar.view;
 
 import com.aterrizar.controller.BuscarAsientoController;
 import com.aterrizar.enumerator.Destino;
+import com.aterrizar.exception.AsientoNoDisponibleException;
+import com.aterrizar.exception.AsientoYaReservadoException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.util.date.PatternDoesntMatchException;
+import com.aterrizar.model.util.operation.ResultadoCompra;
+import com.aterrizar.model.util.operation.ResultadoReserva;
+import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.viewmodel.AsientoTableModel;
 import com.aterrizar.viewmodel.BuscarAsientoViewModel;
 
@@ -48,12 +53,41 @@ public class BuscarAsientoView extends LayoutView {
         setAsientosPanel();
         setBotonesPanel();
 
-        //TODO: implementar validaciones de búsqueda
+        resultadosTabla.getSelectionModel().addListSelectionListener(e -> onFilaSeleccionada());
+
         buscarButton.addActionListener(e -> onBuscarAsientos());
-        //TODO: implementar acciones para comprar y reservar
-        //comprarButton.addActionListener(e -> onComprar());
-        //reservarButton.addActionListener(e -> onReservar());
+        comprarButton.addActionListener(e -> onComprar());
+        reservarButton.addActionListener(e -> onReservar());
         cerrarButton.addActionListener(e -> onCerrar());
+    }
+
+    private void onReservar() {
+        try {
+            vm.reservarVueloAsientoSeleccionado();
+            ResultadoDialog.mostrarResultadoOperacion(new ResultadoReserva(vm.getVueloAsiento()));
+        } catch (AsientoNoDisponibleException e) {
+            ResultadoDialog.mostrarResultadoOperacion(new ResultadoReserva(e.getMessage()));
+        } catch (AsientoYaReservadoException e) {
+            if (ResultadoDialog.preguntarSiSobrereservar(e.getMessage(), vm.getVueloAsiento()) == JOptionPane.OK_OPTION) {
+                vm.sobrereservarVueloAsientoSeleccionado();
+            }
+        }
+    }
+
+    private void onFilaSeleccionada() {
+        int row = resultadosTabla.convertRowIndexToModel(resultadosTabla.getSelectedRow());
+        AsientoTableModel model = (AsientoTableModel) resultadosTabla.getModel();
+        VueloAsiento data = model.getRowAt(row);
+        vm.setVueloAsiento(data);
+    }
+
+    private void onComprar() {
+        try {
+            vm.comprarVueloAsientoSeleccionado();
+            ResultadoDialog.mostrarResultadoOperacion(new ResultadoCompra(vm.getVueloAsiento()));
+        } catch (AsientoNoDisponibleException e) {
+            ResultadoDialog.mostrarResultadoOperacion(new ResultadoCompra(e.getMessage()));
+        }
     }
 
     private void crearController(Usuario usuario) {
@@ -102,6 +136,7 @@ public class BuscarAsientoView extends LayoutView {
         asientosPanel.add(resultadosPanel, BorderLayout.CENTER);
 
         resultadosPanel.add(new JScrollPane(resultadosTabla));
+        resultadosTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resultadosTabla.setModel(new AsientoTableModel(new ArrayList<>()));
     }
 

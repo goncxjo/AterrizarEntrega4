@@ -33,8 +33,7 @@ public class AsientoTableModel extends AbstractTableModel {
     // this method is called to set the value of each cell
     @Override
     public Object getValueAt(int row, int column) {
-        VueloAsiento entity = null;
-        entity = asientosList.get(row);
+        VueloAsiento entity = getRowAt(row);
 
         switch (column) {
             case 0:
@@ -56,6 +55,8 @@ public class AsientoTableModel extends AbstractTableModel {
         }
     }
 
+
+
     @Override
     public int getColumnCount() {
         return headerList.length;
@@ -73,5 +74,9 @@ public class AsientoTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object value, int row, int col) {
+    }
+
+    public VueloAsiento getRowAt(int index) {
+        return asientosList.get(index);
     }
 }

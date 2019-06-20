@@ -1,52 +1,35 @@
 package com.aterrizar.view;
 
 import com.aterrizar.model.util.operation.ResultadoOperacion;
+import com.aterrizar.model.vueloasiento.VueloAsiento;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
-public class ResultadoDialog extends JDialog {
+import static com.aterrizar.view.LayoutView.TITLE;
 
-    private JLabel consultaLabel;
-    private JButton okButton;
-    private JButton sobreReservarButton;
+public class ResultadoDialog {
+    public static int mostrarResultadoOperacion(ResultadoOperacion resultado) {
+        return JOptionPane.showOptionDialog(
+                null
+                , resultado.getResultado()
+                , TITLE
+                , resultado.getTipoOpciones()
+                , resultado.getTipoMensaje()
+                , null
+                , resultado.getOpciones()
+                , resultado.getOpciones()[0]);
+    }
 
-    public ResultadoDialog(Frame owner, String title, boolean modal, ResultadoOperacion resultadoOperacion, boolean estaReservado) {
-        super(owner, title, modal);
-        setBounds(200, 200, 500, 150);
-
-        JPanel contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-        contentPane.setLayout(new BorderLayout());
-        setContentPane(contentPane);
-
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new GridLayout(0, 1));
-        textPanel.setBorder(new EmptyBorder(0,0,15,0));
-        contentPane.add(textPanel);
-
-        JLabel resultadoLabel = new JLabel(resultadoOperacion.getResultado());
-        textPanel.add(resultadoLabel);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(0,3,15,0));
-        contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        if(resultadoOperacion.OK()) {
-            okButton = new JButton("Seguir Buscando");
-            buttonPanel.add(okButton);
-        } else {
-            if(estaReservado) {
-                sobreReservarButton = new JButton("Sobrereservar");
-                consultaLabel = new JLabel("Por favor, intente nuevamente.");
-                buttonPanel.add(sobreReservarButton);
-            } else {
-                consultaLabel = new JLabel("¿Qué desea hacer?");
-            }
-            okButton = new JButton("Aceptar");
-            textPanel.add(consultaLabel);
-            buttonPanel.add(okButton);
-        }
+    public static int preguntarSiSobrereservar(String errorMensaje, VueloAsiento vueloAsiento) {
+        Object[] options = { "Sobrereservar", "Seguir buscando" };
+        return JOptionPane.showOptionDialog(
+                null
+                , errorMensaje + ". \n ¿Qué desea hacer?"
+                , TITLE
+                , JOptionPane.YES_NO_OPTION
+                , JOptionPane.INFORMATION_MESSAGE
+                , null
+                , options
+                , options[0]);
     }
 }

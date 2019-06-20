@@ -2,6 +2,8 @@ package com.aterrizar.viewmodel;
 
 import com.aterrizar.DummyData;
 import com.aterrizar.enumerator.Destino;
+import com.aterrizar.exception.AsientoNoDisponibleException;
+import com.aterrizar.exception.AsientoYaReservadoException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
@@ -17,6 +19,7 @@ public class BuscarAsientoViewModel {
     public Usuario usuario;
     public VueloAsientoFiltro filtro;
     public List<VueloAsiento> vueloAsientos = new ArrayList<>();
+    public VueloAsiento vueloAsiento;
 
     private Repositorio repositorio = DummyData.getRepositorio();
 
@@ -57,5 +60,27 @@ public class BuscarAsientoViewModel {
 
     public void setVueloAsientos(List<VueloAsiento> vueloAsientos) {
         this.vueloAsientos = vueloAsientos;
+    }
+
+    public VueloAsiento getVueloAsiento() {
+        return vueloAsiento;
+    }
+
+    public void setVueloAsiento(VueloAsiento vueloAsiento) {
+        this.vueloAsiento = vueloAsiento;
+    }
+
+    public void comprarVueloAsientoSeleccionado() throws AsientoNoDisponibleException {
+        repositorio.comprar(vueloAsiento, usuario);
+    }
+
+    public void reservarVueloAsientoSeleccionado() throws AsientoNoDisponibleException, AsientoYaReservadoException {
+        // TODO: PENDIENTE MERGE
+        // repositorio.reservar(vueloAsiento, usuario);
+    }
+
+    public void sobrereservarVueloAsientoSeleccionado() {
+        // TODO: PENDIENTE MERGE
+        //repositorio.sobrereservar(vueloAsiento);
     }
 }
