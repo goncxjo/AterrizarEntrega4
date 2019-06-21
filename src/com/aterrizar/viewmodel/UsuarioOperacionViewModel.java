@@ -27,7 +27,5 @@ public abstract class UsuarioOperacionViewModel {
         return vueloAsientos;
     }
 
-    public void setVueloAsientos(List<VueloAsiento> vueloAsientos) {
-        this.vueloAsientos = vueloAsientos;
-    }
+    public abstract String getTipoOperacion();
 }

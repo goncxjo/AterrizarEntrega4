@@ -2,6 +2,7 @@ package com.aterrizar.model.aterrizar;
 
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
+import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.vueloasiento.Reserva;
@@ -89,7 +90,7 @@ public class Repositorio {
         return comunicador.estaReservado(codigoAsiento);
     }
 
-    public List<VueloAsiento> getVueloAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException {
+    public List<VueloAsiento> getVueloAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
         return comunicador.filtrarAsientos(filtro, usuario)
                 .buscarSuperOfertas(usuario)
                 .getVueloAsientos();

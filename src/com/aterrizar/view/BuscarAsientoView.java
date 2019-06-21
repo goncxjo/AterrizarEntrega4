@@ -4,19 +4,20 @@ import com.aterrizar.controller.BuscarAsientoController;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
+import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.util.operation.ResultadoCompra;
+import com.aterrizar.model.util.operation.ResultadoOperacion;
 import com.aterrizar.model.util.operation.ResultadoReserva;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
-import com.aterrizar.viewmodel.AsientoTableModel;
+import com.aterrizar.viewmodel.VueloAsientoTableModel;
 import com.aterrizar.viewmodel.BuscarAsientoViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class BuscarAsientoView extends LayoutView {
 
@@ -34,8 +35,8 @@ public class BuscarAsientoView extends LayoutView {
     private final JLabel destinoLabel = new JLabel("Destino: ");
     private final JLabel fechaLabel = new JLabel("Fecha: ");
 
-    private JComboBox origenComboBox;
-    private JComboBox destinoComboBox;
+    private JComboBox<Destino> origenComboBox;
+    private JComboBox<Destino> destinoComboBox;
     private final JTextField fechaTextField = new JTextField();
 
     private final JTable resultadosTabla = new JTable();
@@ -44,6 +45,9 @@ public class BuscarAsientoView extends LayoutView {
     private final JButton comprarButton = new JButton("Comprar");
     private final JButton reservarButton = new JButton("Reservar");
     private final JButton cerrarButton = new JButton("Cerrar");
+
+    private ResultadoOperacion resultado;
+    private VueloAsientoTableModel vueloAsientoTableModel;
 
     public BuscarAsientoView(Usuario usuario) throws HeadlessException {
         super(WIDTH, HEIGHT + 200);
@@ -62,31 +66,46 @@ public class BuscarAsientoView extends LayoutView {
     }
 
     private void onReservar() {
-        try {
-            vm.reservarVueloAsientoSeleccionado();
-            ResultadoDialog.mostrarResultadoOperacion(new ResultadoReserva(vm.getVueloAsiento()));
-        } catch (AsientoNoDisponibleException e) {
-            ResultadoDialog.mostrarResultadoOperacion(new ResultadoReserva(e.getMessage()));
-        } catch (AsientoYaReservadoException e) {
-            if (ResultadoDialog.preguntarSiSobrereservar(e.getMessage(), vm.getVueloAsiento()) == JOptionPane.OK_OPTION) {
-                vm.sobrereservarVueloAsientoSeleccionado();
+        if(vm.getVueloAsientoSeleccionado() != null) {
+            try {
+                vm.reservarVueloAsientoSeleccionado();
+                resultado = new ResultadoReserva(vm.getVueloAsientoSeleccionado());
+                resultado.mostrarResultadoOperacion();
+
+            } catch (AsientoNoDisponibleException e) {
+                resultado = new ResultadoReserva(e.getMessage());
+                resultado.mostrarResultadoOperacion();
+
+            } catch (AsientoYaReservadoException e) {
+                String pregunta = e.getMessage() + "\n ¿Desea sobrereservar el asiento?";
+                if (ResultadoOperacion.preguntarPorResultadoOperacion(pregunta) == JOptionPane.OK_OPTION) {
+                    vm.sobrereservarVueloAsientoSeleccionado();
+                }
             }
+
+            refrescarTabla();
         }
     }
 
     private void onFilaSeleccionada() {
         int row = resultadosTabla.convertRowIndexToModel(resultadosTabla.getSelectedRow());
-        AsientoTableModel model = (AsientoTableModel) resultadosTabla.getModel();
-        VueloAsiento data = model.getRowAt(row);
-        vm.setVueloAsiento(data);
+        if(row > -1) {
+            VueloAsientoTableModel model = (VueloAsientoTableModel) resultadosTabla.getModel();
+            VueloAsiento data = model.getRowAt(row);
+            vm.setVueloAsiento(data);
+        }
     }
 
     private void onComprar() {
-        try {
-            vm.comprarVueloAsientoSeleccionado();
-            ResultadoDialog.mostrarResultadoOperacion(new ResultadoCompra(vm.getVueloAsiento()));
-        } catch (AsientoNoDisponibleException e) {
-            ResultadoDialog.mostrarResultadoOperacion(new ResultadoCompra(e.getMessage()));
+        if(vm.getVueloAsientoSeleccionado() != null) {
+            try {
+                vm.comprarVueloAsientoSeleccionado();
+                resultado = new ResultadoCompra(vm.getVueloAsientoSeleccionado());
+            } catch (AsientoNoDisponibleException e) {
+                resultado = new ResultadoCompra(e.getMessage());
+            }
+
+            resultado.mostrarResultadoOperacion();
         }
     }
 
@@ -99,7 +118,8 @@ public class BuscarAsientoView extends LayoutView {
 
     private void onBuscarAsientos() {
         try {
-            resetear();
+            limpiarErroresDeFiltro();
+            refrescarTabla();
 
             vm.setFiltro(
                     (Destino) origenComboBox.getSelectedItem()
@@ -107,13 +127,21 @@ public class BuscarAsientoView extends LayoutView {
                     , fechaTextField.getText()
             );
             vm.buscarAsientosDisponibles();
-            resultadosTabla.setModel(new AsientoTableModel(vm.getVueloAsientos()));
-        } catch(ParametroVacioException | PatternDoesntMatchException e) {
+
+            vueloAsientoTableModel = new VueloAsientoTableModel(vm.getVueloAsientos());
+            resultadosTabla.setModel(vueloAsientoTableModel);
+        } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException e) {
             errorLabel.setText(e.getMessage());
         }
     }
 
-    private void resetear() {
+    private void refrescarTabla() {
+        resultadosTabla.clearSelection();
+        VueloAsientoTableModel modelo = (VueloAsientoTableModel) resultadosTabla.getModel();
+        modelo.reset();
+    }
+
+    private void limpiarErroresDeFiltro() {
         errorLabel.setText("");
     }
 
@@ -137,7 +165,7 @@ public class BuscarAsientoView extends LayoutView {
 
         resultadosPanel.add(new JScrollPane(resultadosTabla));
         resultadosTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        resultadosTabla.setModel(new AsientoTableModel(new ArrayList<>()));
+        resultadosTabla.setModel(new VueloAsientoTableModel());
     }
 
     private void setFiltrosPanel() {
@@ -202,10 +230,14 @@ public class BuscarAsientoView extends LayoutView {
         asientosPanel.add(filtrosPanel);
     }
 
-    private JComboBox getComboBoxDestinos() {
-        JComboBox jComboBox = new JComboBox();
+    private JComboBox<Destino> getComboBoxDestinos() {
+        JComboBox<Destino> jComboBox = new JComboBox<Destino>();
+
         jComboBox.setModel(new DefaultComboBoxModel(Destino.values()));
+        jComboBox.setSelectedIndex(0);
         jComboBox.setBackground(Color.WHITE);
+        jComboBox.setRenderer(new DestinoComboRenderer());
+
         return jComboBox;
     }
 

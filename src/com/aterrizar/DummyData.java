@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 public class DummyData {
 
-    public static Usuario getUsuarioEstandar() {
+    public Usuario getUsuarioEstandar() {
         Usuario usuario = new Estandar("Darío", "Sztajnszrajber", 17123456);
 
         VueloAsiento va1 = new VueloAsiento(
@@ -57,7 +57,7 @@ public class DummyData {
         return usuario;
     }
 
-    public static Repositorio getRepositorio() {
+    public Repositorio getRepositorio() {
         AerolineaLanchita mockLanchita = Mockito.mock(AerolineaLanchita.class);
         Repositorio repositorio = new Repositorio(new Comunicador(new AerolineaLanchitaProxy(mockLanchita)));
 

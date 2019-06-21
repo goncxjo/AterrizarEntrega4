@@ -3,9 +3,10 @@ package com.aterrizar.viewmodel;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AsientoTableModel extends AbstractTableModel {
+public class VueloAsientoTableModel extends AbstractTableModel {
     List<VueloAsiento> asientosList;
     String[] headerList = {
             "Aerolinea"
@@ -18,16 +19,12 @@ public class AsientoTableModel extends AbstractTableModel {
 
     Class[] classes = { String.class, String.class, String.class, Double.class, String.class, String.class };
 
-    public AsientoTableModel(List<VueloAsiento> list) {
-        asientosList = list;
-    }
+    public VueloAsientoTableModel() {
+        asientosList = new ArrayList<>();
+     }
 
-    public VueloAsiento obtener(int index) {
-        try {
-            return asientosList.get(index);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
+    public VueloAsientoTableModel(List<VueloAsiento> list) {
+        asientosList = list;
     }
 
     // this method is called to set the value of each cell
@@ -77,6 +74,18 @@ public class AsientoTableModel extends AbstractTableModel {
     }
 
     public VueloAsiento getRowAt(int index) {
-        return asientosList.get(index);
+        try {
+            return asientosList.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
+
+    public void reset() {
+        if(!asientosList.isEmpty()) {
+            asientosList.clear();
+            fireTableDataChanged();
+        }
+    }
+
 }

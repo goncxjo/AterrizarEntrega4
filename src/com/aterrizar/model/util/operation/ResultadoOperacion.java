@@ -29,22 +29,6 @@ public abstract class ResultadoOperacion {
         this.opciones = new Object[]{"Seguir buscando"};
     }
 
-    public boolean OK() {
-        return this.estaOK;
-    }
-
-    public int getTipoOpciones() {
-        return tipoOpciones;
-    }
-
-    public int getTipoMensaje() {
-        return tipoMensaje;
-    }
-
-    public Object[] getOpciones() {
-        return opciones;
-    }
-
     public String getResultado() {
         if (this.estaOK) {
             return getMensajeOK();
@@ -56,4 +40,30 @@ public abstract class ResultadoOperacion {
     protected abstract String getMensajeOK();
 
     protected abstract String getMensajeError();
+
+    protected String getTituloOperacion() {
+        return "Resultado de la operación";
+    }
+
+    public void mostrarResultadoOperacion() {
+        JOptionPane.showOptionDialog(
+                null
+                , getResultado()
+                , getTituloOperacion()
+                , tipoOpciones
+                , tipoMensaje
+                , null
+                , opciones
+                , opciones[0]);
+    }
+
+    public static int preguntarPorResultadoOperacion(String pregunta) {
+        return JOptionPane.showConfirmDialog(
+                null
+                , pregunta
+                , "Pregunta"
+                , JOptionPane.YES_NO_OPTION
+                , JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 }

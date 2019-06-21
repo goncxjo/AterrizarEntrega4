@@ -16,4 +16,9 @@ public class UsuarioReservasViewModel extends UsuarioOperacionViewModel {
                 .map(x -> x.getVueloAsiento())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String getTipoOperacion() {
+        return "Reservas";
+    }
 }

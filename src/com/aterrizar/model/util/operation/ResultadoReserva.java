@@ -19,5 +19,4 @@ public class ResultadoReserva extends ResultadoOperacion {
     protected String getMensajeError() {
         return "Ha ocurrido un error en su reserva: " + mensajeError + ".";
     }
-
 }

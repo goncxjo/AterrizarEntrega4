@@ -13,17 +13,19 @@ public class VerOperacionView extends LayoutView {
     protected final JPanel operacionesPanel = new JPanel();
     protected final JPanel buttonPanel = new JPanel();
     protected final JLabel usuarioLabel = new JLabel();
-    protected final JTable operacionesTabla = new JTable();;
+    protected final JTable operacionesTabla = new JTable();
     protected final JButton cerrarButton = new JButton("Cerrar");
 
     public VerOperacionView(UsuarioOperacionViewModel vm) throws HeadlessException {
         super();
 
-        textPanel.setLayout(new GridLayout(0, 1));
+        textPanel.setLayout(new GridLayout(0, 2));
         textPanel.setBorder(new EmptyBorder(0,0,0,0));
         contentPane.add(textPanel, BorderLayout.NORTH);
 
+        usuarioLabel.setText(vm.getTipoOperacion() + " de " + vm.getUsuario().getNombreCompleto());
         textPanel.add(usuarioLabel);
+        textPanel.add(new JLabel(getResizedImage(vm.getTipoOperacion() + ".png", 50, 50), JLabel.RIGHT));
 
         operacionesPanel.setLayout(new GridLayout(0, 1));
         operacionesPanel.setBorder(new EmptyBorder(25,0,25,0));

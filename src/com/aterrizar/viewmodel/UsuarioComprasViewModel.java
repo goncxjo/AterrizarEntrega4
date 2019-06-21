@@ -11,4 +11,9 @@ public class UsuarioComprasViewModel extends UsuarioOperacionViewModel {
     public void buscarOperacionesUsuario() {
         vueloAsientos = usuario.getHistorialCompras();
     }
+
+    @Override
+    public String getTipoOperacion() {
+        return "Compras";
+    }
 }

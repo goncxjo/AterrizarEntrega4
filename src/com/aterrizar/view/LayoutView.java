@@ -13,6 +13,7 @@ public class LayoutView extends JFrame {
     protected static final int PADDING_1 = 25;
     protected static final int PADDING_2 = 50;
     protected static final EmptyBorder EMPTY_BORDER = new EmptyBorder(PADDING_0, PADDING_0, PADDING_0, PADDING_0);
+    protected static final ImageIcon DEFAULT_ICON = new ImageIcon("global.png");
 
     protected JPanel contentPane;
 
@@ -29,6 +30,7 @@ public class LayoutView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setSize(width, height);
+        setIconImage(DEFAULT_ICON.getImage());
 
         centerFrame();
 
@@ -51,5 +53,12 @@ public class LayoutView extends JFrame {
 
     public void onCerrar() {
         dispose();
+    }
+
+    public ImageIcon getResizedImage(String filePath, int width, int height) {
+        ImageIcon originalImageIcon = new ImageIcon(filePath);
+        Image img = originalImageIcon.getImage();
+        Image scaledImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 }

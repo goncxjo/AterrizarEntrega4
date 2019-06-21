@@ -3,6 +3,7 @@ package com.aterrizar.model.aerolinea;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
+import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.Vuelo;
 import com.aterrizar.model.asiento.Asiento;
@@ -31,13 +32,17 @@ public abstract class Aerolinea {
 
     public String getCodigo() { return codigo; }
 
+    public String getNombre() {
+        return nombre;
+    }
+
     public List<VueloAsiento> getVueloAsientos() { return vueloAsientos; }
 
     public abstract void comprar(String codigoAsiento) throws AsientoNoDisponibleException;
 
     public abstract void reservar(String codigoAsiento, int dni) throws AsientoYaReservadoException, AsientoNoDisponibleException;
 
-    public Aerolinea filtrarAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException {
+    public Aerolinea filtrarAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
         validarParametros(filtro);
         usuario.agregarFiltroAlHistorial(filtro);
 
@@ -60,7 +65,7 @@ public abstract class Aerolinea {
         return this;
     }
 
-    private void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException {
+    private void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException {
         Destino origen = filtro.getOrigen();
         Destino destino = filtro.getDestino();
         String fecha = filtro.getFecha();
@@ -73,6 +78,9 @@ public abstract class Aerolinea {
         }
         if(fecha == null || fecha.equals("")) {
             throw new ParametroVacioException("La fecha no puede estar vacía");
+        }
+        if(origen.equals(destino)) {
+            throw new DestinosIgualesException("El origen y el destino deben ser distintos.");
         }
 
         // Probamos si arroja excepción

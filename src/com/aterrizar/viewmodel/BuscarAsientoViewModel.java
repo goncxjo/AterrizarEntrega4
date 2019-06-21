@@ -4,6 +4,7 @@ import com.aterrizar.DummyData;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
+import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
@@ -21,9 +22,11 @@ public class BuscarAsientoViewModel {
     public List<VueloAsiento> vueloAsientos = new ArrayList<>();
     public VueloAsiento vueloAsiento;
 
-    private Repositorio repositorio = DummyData.getRepositorio();
+    private Repositorio repositorio;
 
     public BuscarAsientoViewModel() {
+        DummyData data = new DummyData();
+        repositorio = data.getRepositorio();
     }
 
     public Usuario getUsuario() {
@@ -50,7 +53,7 @@ public class BuscarAsientoViewModel {
                 .build();
     }
 
-    public void buscarAsientosDisponibles() throws ParametroVacioException, PatternDoesntMatchException {
+    public void buscarAsientosDisponibles() throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException {
         this.vueloAsientos = repositorio.getVueloAsientos(filtro, usuario);
     }
 
@@ -62,7 +65,7 @@ public class BuscarAsientoViewModel {
         this.vueloAsientos = vueloAsientos;
     }
 
-    public VueloAsiento getVueloAsiento() {
+    public VueloAsiento getVueloAsientoSeleccionado() {
         return vueloAsiento;
     }
 

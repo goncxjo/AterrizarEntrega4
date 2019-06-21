@@ -4,12 +4,12 @@ import com.aterrizar.model.asiento.Asiento;
 import com.aterrizar.model.Vuelo;
 
 public class VueloAsiento {
-    private String nombreAerolinea;
     private String codigoAerolinea;
+    private String nombreAerolinea;
     private Vuelo vuelo;
     private Asiento asiento;
 
-    public VueloAsiento(String nombreAerolinea, String codigoAerolinea, Vuelo vuelo, Asiento asiento) {
+    public VueloAsiento(String codigoAerolinea, String nombreAerolinea, Vuelo vuelo, Asiento asiento) {
         this.nombreAerolinea = nombreAerolinea;
         this.codigoAerolinea = codigoAerolinea;
         this.vuelo = vuelo;

@@ -16,8 +16,7 @@ public enum Destino {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
+    public String getCodigoYNombre() {
         return this.name() + " - " + nombre;
     }
 }
