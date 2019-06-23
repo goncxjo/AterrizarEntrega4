@@ -86,13 +86,15 @@ public class AerolineaOceanicProxy extends Aerolinea {
     public void comprar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
 		int dni = usuario.getDNI();
 		String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
-		
-        try {
-            this.aerolineaOceanic.comprarSiHayDisponibilidad(getDniFormateado(dni),
-                                                             getCodigoVuelo(codigoAsiento),
-                                                             getNumeroDeAsiento(codigoAsiento));
-        } catch (AsientoOceanicNoDisponibleException e) {
-            throw new AsientoNoDisponibleException(this.nombre + ": " + e.getMessage());
+
+		boolean sePudoComprar = this.aerolineaOceanic.comprarSiHayDisponibilidad(
+		        getDniFormateado(dni)
+                , getCodigoVuelo(codigoAsiento)
+                , getNumeroDeAsiento(codigoAsiento)
+        );
+
+		if(!sePudoComprar) {
+            throw new AsientoNoDisponibleException(this.nombre + ": el asiento no está disponible");
         }
     }
 
@@ -100,12 +102,15 @@ public class AerolineaOceanicProxy extends Aerolinea {
     public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoYaReservadoException{
     	String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
 
+    	boolean sePudoReservar = aerolineaOceanic.reservar(
+    	        getDniFormateado(usuario.getDNI()),
+                getCodigoVuelo(codigoAsiento),
+                getNumeroDeAsiento(codigoAsiento));
+
         //Se comprueba si no se puede reservar
-       if(!aerolineaOceanic.reservar(getDniFormateado(usuario.getDNI()),
-                                     getCodigoVuelo(codigoAsiento),
-                                     getNumeroDeAsiento(codigoAsiento))){
+        if(!sePudoReservar){
            //Se dispara excepcion informando asiento ya reservado
-           throw new AsientoYaReservadoException(this.nombre + ": " + "Asiento ya reservado");
+           throw new AsientoYaReservadoException(this.nombre + ": " + "el asiento ya está reservado");
        }
 
     }
@@ -142,8 +147,7 @@ public class AerolineaOceanicProxy extends Aerolinea {
 	@Override
     public boolean estaReservado(VueloAsiento vueloAsiento) {
         String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
-		// TODO Auto-generated method stub
-		return false;
+        return this.aerolineaOceanic.estaReservado(getCodigoVuelo(codigoAsiento), getNumeroDeAsiento(codigoAsiento));
 	}
 
 }

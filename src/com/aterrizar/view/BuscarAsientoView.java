@@ -2,18 +2,16 @@ package com.aterrizar.view;
 
 import com.aterrizar.controller.BuscarAsientoController;
 import com.aterrizar.enumerator.Destino;
-import com.aterrizar.exception.AsientoNoDisponibleException;
-import com.aterrizar.exception.AsientoYaReservadoException;
-import com.aterrizar.exception.DestinosIgualesException;
-import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.exception.*;
+import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
+import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.util.date.PatternDoesntMatchException;
 import com.aterrizar.util.operation.ResultadoCompra;
 import com.aterrizar.util.operation.ResultadoOperacion;
 import com.aterrizar.util.operation.ResultadoReserva;
-import com.aterrizar.model.vueloasiento.VueloAsiento;
-import com.aterrizar.viewmodel.VueloAsientoTableModel;
 import com.aterrizar.viewmodel.BuscarAsientoViewModel;
+import com.aterrizar.viewmodel.VueloAsientoTableModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -49,9 +47,9 @@ public class BuscarAsientoView extends LayoutView {
     private ResultadoOperacion resultado;
     private VueloAsientoTableModel vueloAsientoTableModel;
 
-    public BuscarAsientoView(Usuario usuario) throws HeadlessException {
+    public BuscarAsientoView(Repositorio repositorio, Usuario usuario) throws HeadlessException {
         super(WIDTH, HEIGHT + 200);
-        crearController(usuario);
+        crearController(repositorio, usuario);
 
         setErrorPanel();
         setAsientosPanel();
@@ -59,7 +57,7 @@ public class BuscarAsientoView extends LayoutView {
 
         resultadosTabla.getSelectionModel().addListSelectionListener(e -> onFilaSeleccionada());
 
-        buscarButton.addActionListener(e -> onBuscarAsientos());
+        buscarButton.addActionListener(e -> onBuscar());
         comprarButton.addActionListener(e -> onComprar());
         reservarButton.addActionListener(e -> onReservar());
         cerrarButton.addActionListener(e -> onCerrar());
@@ -83,7 +81,7 @@ public class BuscarAsientoView extends LayoutView {
                 }
             }
 
-            refrescarTabla();
+            onBuscar();
         }
     }
 
@@ -106,17 +104,19 @@ public class BuscarAsientoView extends LayoutView {
             }
 
             resultado.mostrarResultadoOperacion();
+
+            onBuscar();
         }
     }
 
-    private void crearController(Usuario usuario) {
+    private void crearController(Repositorio repositorio, Usuario usuario) {
         this.controller = new BuscarAsientoController();
         this.vm = controller.getModelo();
+        this.vm.setRepositorio(repositorio);
         this.vm.setUsuario(usuario);
-
     }
 
-    private void onBuscarAsientos() {
+    private void onBuscar() {
         try {
             limpiarErroresDeFiltro();
             refrescarTabla();
@@ -130,7 +130,7 @@ public class BuscarAsientoView extends LayoutView {
 
             vueloAsientoTableModel = new VueloAsientoTableModel(vm.getVueloAsientos());
             resultadosTabla.setModel(vueloAsientoTableModel);
-        } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException e) {
+        } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException | NoHayAsientosDisponiblesException e) {
             errorLabel.setText(e.getMessage());
         }
     }
@@ -231,7 +231,7 @@ public class BuscarAsientoView extends LayoutView {
     }
 
     private JComboBox<Destino> getComboBoxDestinos() {
-        JComboBox<Destino> jComboBox = new JComboBox<Destino>();
+        JComboBox<Destino> jComboBox = new JComboBox<>();
 
         jComboBox.setModel(new DefaultComboBoxModel(Destino.values()));
         jComboBox.setSelectedIndex(0);

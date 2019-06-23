@@ -68,14 +68,13 @@ public class BienvenidaView extends LayoutView {
     }
 
     private void onBuscarAsientos() {
-        BuscarAsientoView buscarAsientoFrame= new BuscarAsientoView(vm.getUsuario());
+        BuscarAsientoView buscarAsientoFrame = new BuscarAsientoView(DummyData.getRepositorio(), vm.getUsuario());
         buscarAsientoFrame.setVisible(true);
     }
 
     private void crearController() {
         this.controller = new BienvenidaController();
         this.vm = controller.getModelo();
-        DummyData data = new DummyData();
-        this.vm.setUsuario(data.getUsuarioEstandar());
+        this.vm.setUsuario(DummyData.getUsuarioEstandar());
     }
 }

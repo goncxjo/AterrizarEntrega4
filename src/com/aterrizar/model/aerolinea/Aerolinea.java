@@ -44,6 +44,7 @@ public abstract class Aerolinea {
     public abstract void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoYaReservadoException, AsientoNoDisponibleException;
 
     public Aerolinea filtrarAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
+        this.vueloAsientos.clear();
         validarParametros(filtro);
 
         List asientosDisponibles = getAsientosDisponiblesPorAerolinea(filtro);

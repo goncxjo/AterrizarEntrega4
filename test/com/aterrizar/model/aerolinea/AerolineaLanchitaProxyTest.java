@@ -52,7 +52,7 @@ public class AerolineaLanchitaProxyTest {
 
         VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(Destino.BUE)
-                .agregarDestino(Destino.BAR)
+                .agregarDestino(Destino.BCN)
                 .agregarFecha("20190510")
                 .build();
 
@@ -260,7 +260,7 @@ public class AerolineaLanchitaProxyTest {
 
         VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(Destino.BUE)
-                .agregarDestino(Destino.BAR)
+                .agregarDestino(Destino.BCN)
                 .agregarFecha("20190510")
                 .build();
 
@@ -292,7 +292,7 @@ public class AerolineaLanchitaProxyTest {
 
         VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(Destino.BUE)
-                .agregarDestino(Destino.BAR)
+                .agregarDestino(Destino.BCN)
                 .agregarFecha("20190510")
                 .build();
 
@@ -324,7 +324,7 @@ public class AerolineaLanchitaProxyTest {
 
         VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(Destino.BUE)
-                .agregarDestino(Destino.BAR)
+                .agregarDestino(Destino.BCN)
                 .agregarFecha("20190510")
                 .build();
 
@@ -358,7 +358,7 @@ public class AerolineaLanchitaProxyTest {
 
     	VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(Destino.BUE)
-                .agregarDestino(Destino.BAR)
+                .agregarDestino(Destino.BCN)
                 .agregarFecha("20190510")
                 .build();
 

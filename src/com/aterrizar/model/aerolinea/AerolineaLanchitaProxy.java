@@ -44,6 +44,8 @@ public class AerolineaLanchitaProxy extends Aerolinea {
             this.aerolineaLanchita.reservar(vueloAsiento.getAsiento().getCodigoAsiento(), Integer.toString(usuario.getDNI()));
         } catch(AsientoLanchitaYaReservadoException e){
             throw new AsientoYaReservadoException(this.nombre + ": " + "El asiento ya se encuentra reservado");
+        } catch (AsientoLanchitaNoDisponibleException e) {
+            e.printStackTrace();
         }
     }
     

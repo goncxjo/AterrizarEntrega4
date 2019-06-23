@@ -38,16 +38,16 @@ public class Repositorio {
         eliminarSobreReservas(vueloAsiento);
     }
 
-    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
+    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException, AsientoYaReservadoException {
         Aerolinea aerolinea = vueloAsiento.getAerolinea();
 
-        try {
-            aerolinea.reservar(vueloAsiento, usuario);
-            usuario.reservar(vueloAsiento);
-        } catch (AsientoYaReservadoException e) {
-            agregarSobreReserva(vueloAsiento, usuario);
-            usuario.reservar(vueloAsiento);
-        }
+        aerolinea.reservar(vueloAsiento, usuario);
+        usuario.reservar(vueloAsiento);
+    }
+
+    public void sobrereservar(VueloAsiento vueloAsiento, Usuario usuario) {
+        agregarSobreReserva(vueloAsiento, usuario);
+        usuario.reservar(vueloAsiento);
     }
 
     public List<Reserva> getListaEspera(String codigoAsiento) {

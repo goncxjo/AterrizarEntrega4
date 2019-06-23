@@ -1,17 +1,13 @@
 package com.aterrizar.viewmodel;
 
-import com.aterrizar.DummyData;
 import com.aterrizar.enumerator.Destino;
-import com.aterrizar.exception.AsientoNoDisponibleException;
-import com.aterrizar.exception.AsientoYaReservadoException;
-import com.aterrizar.exception.DestinosIgualesException;
-import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.exception.*;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
-import com.aterrizar.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
+import com.aterrizar.util.date.PatternDoesntMatchException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +19,6 @@ public class BuscarAsientoViewModel {
     public VueloAsiento vueloAsiento;
 
     private Repositorio repositorio;
-
-    public BuscarAsientoViewModel() {
-        DummyData data = new DummyData();
-        repositorio = data.getRepositorio();
-    }
 
     public Usuario getUsuario() {
         return usuario;
@@ -53,8 +44,23 @@ public class BuscarAsientoViewModel {
                 .build();
     }
 
-    public void buscarAsientosDisponibles() throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException {
+    public VueloAsiento getVueloAsiento() {
+        return vueloAsiento;
+    }
+
+    public Repositorio getRepositorio() {
+        return repositorio;
+    }
+
+    public void setRepositorio(Repositorio repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    public void buscarAsientosDisponibles() throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException, NoHayAsientosDisponiblesException {
         this.vueloAsientos = repositorio.getVueloAsientos(filtro, usuario);
+        if (this.vueloAsientos.isEmpty()) {
+            throw new NoHayAsientosDisponiblesException("No hay asientos disponibles según los filtros ingresados");
+        }
     }
 
     public List<VueloAsiento> getVueloAsientos() {
@@ -78,8 +84,7 @@ public class BuscarAsientoViewModel {
     }
 
     public void reservarVueloAsientoSeleccionado() throws AsientoNoDisponibleException, AsientoYaReservadoException {
-        // TODO: PENDIENTE MERGE
-        // repositorio.reservar(vueloAsiento, usuario);
+        repositorio.reservar(vueloAsiento, usuario);
     }
 
     public void sobrereservarVueloAsientoSeleccionado() {

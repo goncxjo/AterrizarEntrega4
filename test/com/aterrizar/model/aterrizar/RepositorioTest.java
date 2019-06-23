@@ -45,7 +45,7 @@ public class RepositorioTest {
 	}
 
 	@Test
-	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException {
+	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
 		VueloAsiento vueloAsiento = new VueloAsiento(
@@ -68,7 +68,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void reservar_ReservaUnAsientoNoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException {
+	public void reservar_ReservaUnAsientoNoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
 		VueloAsiento vueloAsiento = new VueloAsiento(
@@ -85,7 +85,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void transferir_CaeLaReservaDeUnAsientoYEsTransferidaAlPrimeroDeLaListaDeEspera() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException {
+	public void transferir_CaeLaReservaDeUnAsientoYEsTransferidaAlPrimeroDeLaListaDeEspera() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 		Usuario usuario2 = new Estandar("Jessica", "Jones", 30303456);
 		
@@ -111,7 +111,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void transferir_CaeLaReservaDeUnAsientoYLaListaDeEsperaEstaVacia() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException {
+	public void transferir_CaeLaReservaDeUnAsientoYLaListaDeEsperaEstaVacia() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 		
 		VueloAsiento vueloAsiento = new VueloAsiento(

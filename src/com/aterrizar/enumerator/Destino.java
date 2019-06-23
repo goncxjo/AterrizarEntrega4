@@ -4,7 +4,7 @@ public enum Destino {
     BUE("Buenos Aires", "Argentina")
     , EZE("Ezeiza", "Argentina")
     , LA("Los Angeles", "EE.UU.")
-    , BAR("Barcelona", "España")
+    , BCN("Barcelona", "España")
     , MAD("Madrid", "España")
     , TOK("Tokio", "Japón")
     , BSB("Brasilia", "Brasil")
@@ -20,6 +20,6 @@ public enum Destino {
     }
 
     public String getCodigoYNombre() {
-        return this.name() + " - " + nombre + "(" + pais + ")";
+        return this.name() + " - " + nombre + " (" + pais + ")";
     }
 }
