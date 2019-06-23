@@ -1,4 +1,4 @@
-package com.aterrizar.model.util.date.pattern;
+package com.aterrizar.util.date.pattern;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,9 +1,9 @@
-package com.aterrizar.model.util.date;
+package com.aterrizar.util.date;
 
-import com.aterrizar.model.util.date.pattern.DatePattern;
-import com.aterrizar.model.util.date.pattern.ISO8601;
-import com.aterrizar.model.util.date.pattern.LatinAmerican;
-import com.aterrizar.model.util.date.pattern.NorthAmerican;
+import com.aterrizar.util.date.pattern.DatePattern;
+import com.aterrizar.util.date.pattern.ISO8601;
+import com.aterrizar.util.date.pattern.LatinAmerican;
+import com.aterrizar.util.date.pattern.NorthAmerican;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

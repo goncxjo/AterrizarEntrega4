@@ -1,4 +1,4 @@
-package com.aterrizar.model.util.date;
+package com.aterrizar.util.date;
 
 public class PatternDoesntMatchException extends RuntimeException {
     public PatternDoesntMatchException() {

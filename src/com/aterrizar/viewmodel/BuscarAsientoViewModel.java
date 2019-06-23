@@ -8,7 +8,7 @@ import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
-import com.aterrizar.model.util.date.PatternDoesntMatchException;
+import com.aterrizar.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;

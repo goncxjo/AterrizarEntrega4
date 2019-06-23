@@ -31,7 +31,7 @@ public class Repositorio {
     public void comprar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
         String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
 
-        comunicador.comprar(codigoAsiento);
+        comunicador.comprar(vueloAsiento, usuario);
         usuario.comprar(vueloAsiento);
         eliminarSobreReservas(codigoAsiento);
     }
@@ -40,10 +40,11 @@ public class Repositorio {
         String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
 
         try {
-            comunicador.reservar(codigoAsiento, usuario.getDNI());
+            comunicador.reservar(vueloAsiento, usuario);
             usuario.reservar(vueloAsiento);
         } catch (AsientoYaReservadoException e) {
             agregarSobreReserva(vueloAsiento, usuario);
+            usuario.reservar(vueloAsiento);
         }
     }
 
@@ -59,6 +60,10 @@ public class Repositorio {
         listaEspera.add(new Reserva(vueloAsiento, usuario));
     }
 
+    private void eliminarSobreReserva(Reserva reserva) {
+        listaEspera.removeIf(x -> x.getVueloAsiento().getAsiento().getCodigoAsiento().equals(reserva.getVueloAsiento().getAsiento().getCodigoAsiento()));
+    }
+
     private void eliminarSobreReservas(String codigoAsiento) {
         listaEspera.removeAll(getListaEspera(codigoAsiento));
     }
@@ -71,6 +76,7 @@ public class Repositorio {
             Reserva reservaEnEspera = listaEsperaPorCodigoAsiento.get(0);
             Usuario otroUsuario = reservaEnEspera.getUsuario();
             usuario.transferir(reserva, otroUsuario);
+            eliminarSobreReserva(reserva);
         } else {
             usuario.eliminar(reserva);
         }

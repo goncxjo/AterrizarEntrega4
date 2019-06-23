@@ -1,5 +1,6 @@
 package com.aterrizar.model.aerolinea;
 
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
@@ -8,8 +9,8 @@ import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.Vuelo;
 import com.aterrizar.model.asiento.Asiento;
 import com.aterrizar.model.usuario.Usuario;
-import com.aterrizar.model.util.date.DateHelper;
-import com.aterrizar.model.util.date.PatternDoesntMatchException;
+import com.aterrizar.util.date.DateHelper;
+import com.aterrizar.util.date.PatternDoesntMatchException;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 
@@ -32,15 +33,15 @@ public abstract class Aerolinea {
 
     public String getCodigo() { return codigo; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
 
     public List<VueloAsiento> getVueloAsientos() { return vueloAsientos; }
 
-    public abstract void comprar(String codigoAsiento) throws AsientoNoDisponibleException;
+    public void comprar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException{
+        vueloAsiento.getVuelo().increasePopularidad();
+    }
 
-    public abstract void reservar(String codigoAsiento, int dni) throws AsientoYaReservadoException, AsientoNoDisponibleException;
+    public abstract void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoYaReservadoException, AsientoNoDisponibleException;
 
     public Aerolinea filtrarAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
         validarParametros(filtro);
@@ -55,17 +56,15 @@ public abstract class Aerolinea {
         return this;
     }
 
-    public Aerolinea buscarSuperOfertas(Usuario usuario) {
-        for (VueloAsiento vueloAsiento : this.vueloAsientos) {
-            if (usuario.puedeVerSuperOferta(vueloAsiento.getAsiento())) {
-                vueloAsiento.getAsiento().marcarComoSuperOferta();
-            }
-        }
+    protected abstract double getTiempoVuelo(Object asiento);
+    
+    protected abstract double getPopularidad(Object asiento);
 
-        return this;
+    protected List getAsientosDisponiblesPorAerolinea(VueloAsientoFiltro filtro) {
+        return new ArrayList();
     }
 
-    private void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException {
+    protected void validarParametros(VueloAsientoFiltro filtro) throws ParametroVacioException, PatternDoesntMatchException, DestinosIgualesException {
         Destino origen = filtro.getOrigen();
         Destino destino = filtro.getDestino();
         String fecha = filtro.getFecha();
@@ -93,11 +92,25 @@ public abstract class Aerolinea {
                 .map(asiento -> new VueloAsiento(
                                 this.codigo
                                 , this.nombre
-                                , new Vuelo(filtro.getOrigen(), filtro.getDestino(), DateHelper.parseToDate(filtro.getFecha()))
+                                , new Vuelo(filtro.getOrigen(), filtro.getDestino(), DateHelper.parseToDate(filtro.getFecha()), getTiempoVuelo(asiento), getPopularidad(asiento))
                                 , generarAsiento(asiento, usuario)
                         )
                 )
                 .collect(Collectors.toList());
+    }
+
+    protected Asiento generarAsiento(Object asiento, Usuario usuario) {
+        return null;
+    }
+
+    public Aerolinea buscarSuperOfertas(Usuario usuario) {
+        for (VueloAsiento vueloAsiento : this.vueloAsientos) {
+            if (usuario.puedeVerSuperOferta(vueloAsiento.getAsiento())) {
+                vueloAsiento.getAsiento().marcarComoSuperOferta();
+            }
+        }
+
+        return this;
     }
 
     protected VueloAsiento getVueloAsiento(String codigoAsiento) throws AsientoNoDisponibleException {
@@ -113,12 +126,13 @@ public abstract class Aerolinea {
         }
     }
 
-    protected List getAsientosDisponiblesPorAerolinea(VueloAsientoFiltro filtro) {
-        return new ArrayList();
-    }
+    public Aerolinea OrdenarAsientosPor(TipoOrden tipoOrden) {
+        if(tipoOrden == null) {
+            tipoOrden = TipoOrden.superOferta;
+        }
+        this.vueloAsientos.sort(tipoOrden::sort);
 
-    protected Asiento generarAsiento(Object asiento, Usuario usuario) {
-        return null;
+        return this;
     }
 
     public abstract boolean estaReservado(String codigoAsiento);

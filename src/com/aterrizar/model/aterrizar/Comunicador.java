@@ -6,8 +6,12 @@ import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
 import com.aterrizar.model.aerolinea.Aerolinea;
 import com.aterrizar.model.aerolinea.AerolineaLanchitaProxy;
+import com.aterrizar.model.asiento.Asiento;
 import com.aterrizar.model.usuario.Usuario;
+import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
+
+import java.util.List;
 
 public class Comunicador extends Aerolinea {
     AerolineaLanchitaProxy aerolineaLanchitaProxy;
@@ -22,15 +26,17 @@ public class Comunicador extends Aerolinea {
     }
 
     @Override
-    public void comprar(String codigoAsiento) throws AsientoNoDisponibleException {
+    public void comprar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
+	    String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
         Aerolinea aerolineaProxy = detectarAerolinea(codigoAsiento);
-        aerolineaProxy.comprar(codigoAsiento);
+        aerolineaProxy.comprar(vueloAsiento, usuario);
     }
 
     @Override
-    public void reservar(String codigoAsiento, int dni) throws AsientoYaReservadoException, AsientoNoDisponibleException {
+    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoYaReservadoException, AsientoNoDisponibleException {
+	    String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
         Aerolinea aerolineaProxy = detectarAerolinea(codigoAsiento);
-        aerolineaProxy.reservar(codigoAsiento, dni);
+        aerolineaProxy.reservar(vueloAsiento, usuario);
     }
 
     private Aerolinea detectarAerolinea(String codigoAsiento) throws AsientoNoDisponibleException {
@@ -39,6 +45,26 @@ public class Comunicador extends Aerolinea {
         } else {
             throw new AsientoNoDisponibleException("El asiento no existe");
         }
+    }
+
+    @Override
+    protected List getAsientosDisponiblesPorAerolinea(VueloAsientoFiltro filtro) {
+        return null;
+    }
+
+    @Override
+    protected double getTiempoVuelo(Object asiento) {
+        return 0;
+    }
+    
+    @Override
+    protected double getPopularidad(Object asiento) {
+        return 0;
+    }
+
+    @Override
+    protected Asiento generarAsiento(Object asiento, Usuario usuario) {
+        return null;
     }
 
     private Aerolinea agregarAsientosLanchita(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {

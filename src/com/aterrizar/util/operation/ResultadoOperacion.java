@@ -1,4 +1,4 @@
-package com.aterrizar.model.util.operation;
+package com.aterrizar.util.operation;
 
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 

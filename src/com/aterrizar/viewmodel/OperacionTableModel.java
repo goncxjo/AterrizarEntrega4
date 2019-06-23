@@ -1,6 +1,6 @@
 package com.aterrizar.viewmodel;
 
-import com.aterrizar.model.util.date.DateHelper;
+import com.aterrizar.util.date.DateHelper;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 
 import javax.swing.table.AbstractTableModel;
