@@ -45,7 +45,6 @@ public abstract class Aerolinea {
 
     public Aerolinea filtrarAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
         validarParametros(filtro);
-        usuario.agregarFiltroAlHistorial(filtro);
 
         List asientosDisponibles = getAsientosDisponiblesPorAerolinea(filtro);
 
@@ -90,8 +89,7 @@ public abstract class Aerolinea {
         return asientosDisponibles
                 .stream()
                 .map(asiento -> new VueloAsiento(
-                                this.codigo
-                                , this.nombre
+                                this
                                 , new Vuelo(filtro.getOrigen(), filtro.getDestino(), DateHelper.parseToDate(filtro.getFecha()), getTiempoVuelo(asiento), getPopularidad(asiento))
                                 , generarAsiento(asiento, usuario)
                         )
@@ -135,5 +133,5 @@ public abstract class Aerolinea {
         return this;
     }
 
-    public abstract boolean estaReservado(String codigoAsiento);
+    public abstract boolean estaReservado(VueloAsiento vueloAsiento);
 }

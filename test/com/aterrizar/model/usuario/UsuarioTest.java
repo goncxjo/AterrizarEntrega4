@@ -5,6 +5,8 @@ import com.aterrizar.enumerator.Ubicacion;
 import com.aterrizar.enumerator.asiento.Estado;
 import com.aterrizar.exception.TipoUsuarioNoDisponibleException;
 import com.aterrizar.model.Vuelo;
+import com.aterrizar.model.aerolinea.AerolineaLanchitaProxy;
+import com.aterrizar.model.aerolinea.AerolineaOceanicProxy;
 import com.aterrizar.model.asiento.Ejecutivo;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.util.date.DateHelper;
@@ -14,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class UsuarioTest {
+    AerolineaLanchitaProxy aerolineaLanchitaProxy;
+    AerolineaOceanicProxy aerolineaOceanicProxy;
 
     @Test
     public void actualizarTipo_UsuarioNoRegistrado_SeVuelve_UsuarioEstandar() throws TipoUsuarioNoDisponibleException {
@@ -33,8 +37,7 @@ public class UsuarioTest {
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
         VueloAsiento vueloAsiento = new VueloAsiento(
-                "LCH"
-                , "Lanchita"
+                aerolineaLanchitaProxy
                 , new Vuelo(Destino.BUE, Destino.MIA, DateHelper.parseToDate("13/05/2019"), 12.0, 0.0)
                 , new Ejecutivo("LCH 005-40", 50000, Ubicacion.Centro, Estado.Disponible)
         );
@@ -53,8 +56,7 @@ public class UsuarioTest {
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
         VueloAsiento vueloAsiento = new VueloAsiento(
-                "LCH"
-                , "Lanchita"
+                aerolineaLanchitaProxy
                 , new Vuelo(Destino.BUE, Destino.MIA, DateHelper.parseToDate("13/05/2019"), 12.0, 0.0)
                 , new Ejecutivo("LCH 005-40", 50000, Ubicacion.Centro, Estado.Disponible)
         );
@@ -78,8 +80,7 @@ public class UsuarioTest {
     public void comprarAsiento_UnUsuarioCompraUnAsiento() {
         Usuario usuario = new NoRegistrado("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
         VueloAsiento vueloAsiento = new VueloAsiento(
-                "LCH"
-                , "Lanchita"
+                aerolineaLanchitaProxy
                 , new Vuelo(Destino.BUE, Destino.MIA, DateHelper.parseToDate("13/05/2019"), 10.0, 5.0)
                 , new Ejecutivo("LCH 005-40", 50000, Ubicacion.Centro, Estado.Disponible)
         );

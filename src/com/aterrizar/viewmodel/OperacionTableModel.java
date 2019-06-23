@@ -43,7 +43,7 @@ public class OperacionTableModel extends AbstractTableModel {
             case 0:
                 return DateHelper.parseToString(entity.getVuelo().getFecha(), "dd/MM/yyyy");
             case 1:
-                return entity.getNombreAerolinea();
+                return entity.getAerolinea().getNombre();
             case 2:
                 String codigoVuelo = entity.getAsiento().getCodigoAsiento().split("-")[0];
                 return codigoVuelo;

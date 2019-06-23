@@ -1,17 +1,16 @@
 package com.aterrizar.model.vueloasiento;
 
-import com.aterrizar.model.asiento.Asiento;
 import com.aterrizar.model.Vuelo;
+import com.aterrizar.model.aerolinea.Aerolinea;
+import com.aterrizar.model.asiento.Asiento;
 
 public class VueloAsiento {
-    private String codigoAerolinea;
-    private String nombreAerolinea;
+    private Aerolinea aerolinea;
     private Vuelo vuelo;
     private Asiento asiento;
 
-    public VueloAsiento(String codigoAerolinea, String nombreAerolinea, Vuelo vuelo, Asiento asiento) {
-        this.nombreAerolinea = nombreAerolinea;
-        this.codigoAerolinea = codigoAerolinea;
+    public VueloAsiento(Aerolinea aerolinea, Vuelo vuelo, Asiento asiento) {
+        this.aerolinea = aerolinea;
         this.vuelo = vuelo;
         this.asiento = asiento;
     }
@@ -20,20 +19,8 @@ public class VueloAsiento {
         this.vuelo = new Vuelo();
     }
 
-    public String getNombreAerolinea() {
-        return nombreAerolinea;
-    }
-
-    public void setNombreAerolinea(String nombreAerolinea) {
-        this.nombreAerolinea = nombreAerolinea;
-    }
-
-    public String getCodigoAerolinea() {
-        return codigoAerolinea;
-    }
-
-    public void setCodigoAerolinea(String codigoAerolinea) {
-        this.codigoAerolinea = codigoAerolinea;
+    public Aerolinea getAerolinea() {
+        return aerolinea;
     }
 
     public Vuelo getVuelo() {
@@ -51,5 +38,4 @@ public class VueloAsiento {
     public void setAsiento(Asiento asiento) {
         this.asiento = asiento;
     }
-
 }

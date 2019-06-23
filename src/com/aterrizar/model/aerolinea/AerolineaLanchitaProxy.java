@@ -54,7 +54,8 @@ public class AerolineaLanchitaProxy extends Aerolinea {
     }
 
     @Override
-    public boolean estaReservado(String codigoAsiento) {
+    public boolean estaReservado(VueloAsiento vueloAsiento) {
+        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
         return this.aerolineaLanchita.estaReservado(codigoAsiento);
     }
 

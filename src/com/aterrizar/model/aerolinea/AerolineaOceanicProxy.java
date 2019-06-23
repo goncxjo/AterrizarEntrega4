@@ -114,7 +114,7 @@ public class AerolineaOceanicProxy extends Aerolinea {
 		return this.aerolineaOceanic.estaReservado(codigoDeVuelo, numeroDeAsiento);
 	}
 
-	private String getCodigoVuelo (String codigoAsiento){
+	private String getCodigoVuelo(String codigoAsiento){
        return codigoAsiento.split("-")[0];
     }
 
@@ -140,7 +140,8 @@ public class AerolineaOceanicProxy extends Aerolinea {
 	}
 
 	@Override
-	public boolean estaReservado(String codigoAsiento) {
+    public boolean estaReservado(VueloAsiento vueloAsiento) {
+        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
 		// TODO Auto-generated method stub
 		return false;
 	}

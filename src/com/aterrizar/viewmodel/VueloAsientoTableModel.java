@@ -34,7 +34,7 @@ public class VueloAsientoTableModel extends AbstractTableModel {
 
         switch (column) {
             case 0:
-                return entity.getNombreAerolinea();
+                return entity.getAerolinea().getNombre();
             case 1:
                 String codigoVuelo = entity.getAsiento().getCodigoAsiento().split("-")[0];
                 return codigoVuelo;

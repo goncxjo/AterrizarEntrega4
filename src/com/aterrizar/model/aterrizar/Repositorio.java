@@ -4,6 +4,7 @@ import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
 import com.aterrizar.exception.DestinosIgualesException;
 import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.model.aerolinea.Aerolinea;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.vueloasiento.Reserva;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
@@ -16,31 +17,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Repositorio {
-    private Comunicador comunicador;
     private ReservasHelper reservasHelper;
     private List<Reserva> listaEspera =  new ArrayList<>();
     private List<Usuario> usuarios = new ArrayList<>();
+    private List<Aerolinea> aerolineasProxy;
     private List<VueloAsiento> vueloAsientos = new ArrayList<>();
 
-    public Repositorio(Comunicador comunicador) {
-        this.comunicador = comunicador;
+    public Repositorio(List<Aerolinea> aerolineasProxy) {
+        this.aerolineasProxy = aerolineasProxy;
     }
 
     public void registrarUsuario(String nombre, String apellido, int DNI) {}
 
     public void comprar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
-        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
+        Aerolinea aerolinea = vueloAsiento.getAerolinea();
 
-        comunicador.comprar(vueloAsiento, usuario);
+        aerolinea.comprar(vueloAsiento, usuario);
         usuario.comprar(vueloAsiento);
-        eliminarSobreReservas(codigoAsiento);
+
+        eliminarSobreReservas(vueloAsiento);
     }
 
     public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException {
-        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
+        Aerolinea aerolinea = vueloAsiento.getAerolinea();
 
         try {
-            comunicador.reservar(vueloAsiento, usuario);
+            aerolinea.reservar(vueloAsiento, usuario);
             usuario.reservar(vueloAsiento);
         } catch (AsientoYaReservadoException e) {
             agregarSobreReserva(vueloAsiento, usuario);
@@ -64,7 +66,8 @@ public class Repositorio {
         listaEspera.removeIf(x -> x.getVueloAsiento().getAsiento().getCodigoAsiento().equals(reserva.getVueloAsiento().getAsiento().getCodigoAsiento()));
     }
 
-    private void eliminarSobreReservas(String codigoAsiento) {
+    private void eliminarSobreReservas(VueloAsiento vueloAsiento) {
+        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
         listaEspera.removeAll(getListaEspera(codigoAsiento));
     }
 
@@ -92,13 +95,26 @@ public class Repositorio {
         }
     }
 
-    public boolean estaReservado(String codigoAsiento) {
-        return comunicador.estaReservado(codigoAsiento);
+    public boolean estaReservado(VueloAsiento vueloAsiento) {
+        Aerolinea aerolinea = vueloAsiento.getAerolinea();
+
+        return aerolinea.estaReservado(vueloAsiento);
     }
 
     public List<VueloAsiento> getVueloAsientos(VueloAsientoFiltro filtro, Usuario usuario) throws ParametroVacioException, DestinosIgualesException {
-        return comunicador.filtrarAsientos(filtro, usuario)
-                .buscarSuperOfertas(usuario)
-                .getVueloAsientos();
+        this.vueloAsientos.clear();
+
+        for (Aerolinea aerolineaProxy : this.aerolineasProxy) {
+            this.vueloAsientos.addAll(
+                    aerolineaProxy
+                            .filtrarAsientos(filtro, usuario)
+                            .buscarSuperOfertas(usuario)
+                            .getVueloAsientos()
+            );
+        }
+
+        usuario.agregarFiltroAlHistorial(filtro);
+
+        return this.vueloAsientos;
     }
 }
