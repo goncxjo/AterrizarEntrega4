@@ -124,8 +124,8 @@ public class AerolineaOceanicTest {
         List<AsientoDTO> asientos = new ArrayList();
         Date fechaSalida = DateHelper.parseFromISO8601("31/12/1990");
 
-        asientos.add(new AsientoDTO("OCE 001", 1, fechaSalida, null, 100, new Ejecutivo(), Ubicacion.Centro));
-        asientos.add(new AsientoDTO("OCE 002", 1, fechaSalida, null, 110, new Turista(), Ubicacion.Pasillo));
+        asientos.add(new AsientoDTO("OCE 001", 1, fechaSalida, null, 100, new Ejecutivo(), Ubicacion.Centro, 10.0, 3.0));
+        asientos.add(new AsientoDTO("OCE 002", 1, fechaSalida, null, 110, new Turista(), Ubicacion.Pasillo,  20.0, 4.0));
         return asientos;
     }
 
@@ -134,8 +134,8 @@ public class AerolineaOceanicTest {
         List<AsientoDTO> asientos = new ArrayList();
         Date fechaSalida = DateHelper.parseFromISO8601("31/12/1990");
 
-        asientos.add(new AsientoDTO("OCE 003", 1, fechaSalida, null, 340, new PrimeraClase(), Ubicacion.Pasillo));
-        asientos.add(new AsientoDTO("OCE 004", 1, fechaSalida, null, 200, new Ejecutivo(), Ubicacion.Ventanilla));
+        asientos.add(new AsientoDTO("OCE 003", 1, fechaSalida, null, 340, new PrimeraClase(), Ubicacion.Pasillo, 50.0, 5.0));
+        asientos.add(new AsientoDTO("OCE 004", 1, fechaSalida, null, 200, new Ejecutivo(), Ubicacion.Ventanilla, 15.0, 2.0));
         return asientos;
     }
 

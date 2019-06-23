@@ -2,6 +2,7 @@ package com.aterrizar.model.aerolinea;
 
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.enumerator.Ubicacion;
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.exception.*;
 import com.aterrizar.model.asiento.AsientoDTO;
 import com.aterrizar.model.asiento.Ejecutivo;
@@ -20,9 +21,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
@@ -262,15 +265,14 @@ public class AerolineaOceanicProxyTest {
     }
 
     @Test(expected = AsientoNoDisponibleException.class)
-    public void comprarSiHayDisponibilidad_UsuarioEstandar_NoPuedeComprarUnAsientoReservado() throws AsientoNoDisponibleException
+    public void comprarSiHayDisponibilidad_UsuarioEstandar_NoPuedeComprarNoDisponible() throws AsientoNoDisponibleException
             , AsientoOceanicNoDisponibleException
             , ParametroVacioException, DestinosIgualesException {
+    
     	when(mockOceanic.asientosDisponiblesParaOrigenYDestino("BUE", "31/12/1990","SLA"))
 		        .thenReturn(this.generarAsientosDeBUEaSLA());		
 		
-        doThrow(new AsientoOceanicNoDisponibleException("El asiento ya se encuentra reservado"))
-                .when(mockOceanic)
-                .comprarSiHayDisponibilidad(anyString(), eq("OCE 001"), eq(1));
+
         //Se resetean los asientos disponibles
         aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
         
@@ -352,14 +354,123 @@ public class AerolineaOceanicProxyTest {
         assertTrue("El asiento OCE 001-1 no se pudo reservar",
                 vueloAsientosAntesDeReservar.size() == 2 && vueloAsientosDespuesDeReservar.size() == 1);
     }
+    @Test
+    public void ordenarPor_precioDescendente() throws ParametroVacioException, DestinosIgualesException {
+        //Se cargan vuelos disponibles
+        when(mockOceanic.asientosDisponiblesParaOrigenYDestino("BUE", "31/12/1990","SLA"))
+                .thenReturn(this.generarAsientosDeBUEaSLA());
+
+        aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+        VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+                .agregarOrigen(Destino.BUE)
+                .agregarDestino(Destino.LA)
+                .agregarFecha("31/12/1990")
+                .build();
+
+        Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
+
+        List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
+                .filtrarAsientos(filtro, usuario)
+                .OrdenarAsientosPor(TipoOrden.precioDescendente)
+                .getVueloAsientos();
+
+        Double[] listaEsperada = { 110.0, 100.0 };
+        for (int i = 0; i < vueloAsientos.size(); i++) {
+            assertEquals("Los asientos no se han ordenado por precio de forma descendente.", listaEsperada[i], vueloAsientos.get(i).getAsiento().getPrecio(), 0.0);
+        }
+    }
+  
+    @Test
+    public void ordenarPor_precioAscendente() throws ParametroVacioException, DestinosIgualesException {
+        //Se cargan vuelos disponibles
+        when(mockOceanic.asientosDisponiblesParaOrigenYDestino("BUE", "31/12/1990","MEX"))
+                .thenReturn(this.generarAsientosDeBUEaMEX());
+
+        aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+        VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+                .agregarOrigen(Destino.BUE)
+                .agregarDestino(Destino.MEX)
+                .agregarFecha("31/12/1990")
+                .build();
+
+        Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
+
+        List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
+                .filtrarAsientos(filtro, usuario)
+                .OrdenarAsientosPor(TipoOrden.precioAscendente)
+                .getVueloAsientos();
+
+        Double[] listaEsperada = { 200.0, 340.0 };
+        for (int i = 0; i < vueloAsientos.size(); i++) {
+            assertEquals("Los asientos no se han ordenado por precio de forma ascendente.", listaEsperada[i], vueloAsientos.get(i).getAsiento().getPrecio(), 0.0);
+        }
+    }
+    @Test
+    public void ordenarPor_tiempoDeVuelo() throws ParametroVacioException, DestinosIgualesException {
+        //Se cargan vuelos disponibles
+        when(mockOceanic.asientosDisponiblesParaOrigenYDestino("BUE", "31/12/1990","MEX"))
+                .thenReturn(this.generarAsientosDeBUEaMEX());
+
+
+        aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+        VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+                .agregarOrigen(Destino.BUE)
+                .agregarDestino(Destino.MEX)
+                .agregarFecha("31/12/1990")
+                .build();
+
+        Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
+
+        List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
+                .filtrarAsientos(filtro, usuario)
+                .OrdenarAsientosPor(TipoOrden.tiempoVuelo)
+                .getVueloAsientos();
+
+        Double[] listaEsperada = { 15.0, 50.0 };
+        for (int i = 0; i < vueloAsientos.size(); i++) {
+            assertEquals("Los asientos no se han ordenado por tiempo de vuelo.", listaEsperada[i], vueloAsientos.get(i).getVuelo().getTiempoVuelo());
+        }
+    }
+    
+    @Test
+    public void ordenarPor_popularidad() throws ParametroVacioException, AsientoNoDisponibleException, DestinosIgualesException {
+    	
+        //Se cargan vuelos disponibles
+        when(mockOceanic.asientosDisponiblesParaOrigenYDestino("BUE", "31/12/1990","SLA"))
+                .thenReturn(this.generarAsientosDeBUEaSLA());
+
+        aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+        Usuario usuario = new NoRegistrado("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
+
+        VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+                .agregarOrigen(Destino.BUE)
+                .agregarDestino(Destino.LA)
+                .agregarFecha("31/12/1990")
+                .build();
+
+        List<VueloAsiento> vueloAsientosOrdenadosPorPopularidad = aerolineaOceanicProxy
+                .filtrarAsientos(filtro, usuario)
+                .OrdenarAsientosPor(TipoOrden.popularidad)
+                .getVueloAsientos();
+    	
+        Double[] listaEsperada = { 4.0, 3.0 };
+        
+        for (int i = 0; i < vueloAsientosOrdenadosPorPopularidad.size(); i++) {
+            assertEquals("Los asientos no se han ordenado por popularidad.", listaEsperada[i], vueloAsientosOrdenadosPorPopularidad.get(i).getVuelo().getPopularidad());
+        }
+    }
     
     //Generar asientos  Origen de Buenos Aires a Los Angeles
     public List<AsientoDTO> generarAsientosDeBUEaSLA(){
         List<AsientoDTO> asientos = new ArrayList();
         Date fechaSalida = DateHelper.parseFromISO8601("31/12/1990");
 
-        asientos.add(new AsientoDTO("OCE 001", 1, fechaSalida, null, 100, new Ejecutivo(), Ubicacion.Centro));
-        asientos.add(new AsientoDTO("OCE 002", 1, fechaSalida, null, 110, new Turista(), Ubicacion.Pasillo));
+        asientos.add(new AsientoDTO("OCE 001", 1, fechaSalida, null, 100, new Ejecutivo(), Ubicacion.Centro, 10.0, 3.0));
+        asientos.add(new AsientoDTO("OCE 002", 1, fechaSalida, null, 110, new Turista(), Ubicacion.Pasillo,  20.0, 4.0));
         return asientos;
     }
 
@@ -368,8 +479,8 @@ public class AerolineaOceanicProxyTest {
         List<AsientoDTO> asientos = new ArrayList();
         Date fechaSalida = DateHelper.parseFromISO8601("31/12/1990");
 
-        asientos.add(new AsientoDTO("OCE 003", 1, fechaSalida, null, 340, new PrimeraClase(), Ubicacion.Pasillo));
-        asientos.add(new AsientoDTO("OCE 004", 1, fechaSalida, null, 200, new Ejecutivo(), Ubicacion.Ventanilla));
+        asientos.add(new AsientoDTO("OCE 003", 1, fechaSalida, null, 340, new PrimeraClase(), Ubicacion.Pasillo, 50.0, 5.0));
+        asientos.add(new AsientoDTO("OCE 004", 1, fechaSalida, null, 200, new Ejecutivo(), Ubicacion.Ventanilla, 15.0, 2.0));
         return asientos;
     }
 

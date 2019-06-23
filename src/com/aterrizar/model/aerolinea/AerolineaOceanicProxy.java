@@ -134,14 +134,16 @@ public class AerolineaOceanicProxy extends Aerolinea {
 
 	@Override
 	protected double getTiempoVuelo(Object asiento) {
-		// TODO Auto-generated method stub
-		return 0;
+        AsientoDTO asientoGenerado = (AsientoDTO) asiento;
+
+        return asientoGenerado.getTiempoDeVuelo();
 	}
 
 	@Override
 	protected double getPopularidad(Object asiento) {
-		// TODO Auto-generated method stub
-		return 0;
+        AsientoDTO asientoGenerado = (AsientoDTO) asiento;
+
+        return asientoGenerado.getPopularidad();
 	}
 
 	@Override

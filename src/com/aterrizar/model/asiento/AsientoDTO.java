@@ -15,8 +15,18 @@ public class AsientoDTO {
     private double precio;
     private Asiento claseAsiento;
     private Ubicacion ubicacion;
+    private double	tiempoDeVuelo;
+    private double	popularidad;
 
-    public AsientoDTO(String codigoVuelo, Integer numeroAsiento, Date fechaSalida, Time horaSalida, double precio, Asiento claseAsiento, Ubicacion ubicacion) {
+	public AsientoDTO(String codigoVuelo,
+					  Integer numeroAsiento,
+					  Date fechaSalida,
+					  Time horaSalida,
+					  double precio,
+					  Asiento claseAsiento,
+					  Ubicacion ubicacion,
+					  double tiempoDeVuelo,
+					  double popularidad) {
 
         this.codigoVuelo = codigoVuelo;
         this.numeroAsiento = numeroAsiento;
@@ -25,6 +35,8 @@ public class AsientoDTO {
         this.precio = precio;
         this.claseAsiento = claseAsiento;
         this.ubicacion = ubicacion;
+        this.tiempoDeVuelo = tiempoDeVuelo;
+        this.popularidad = popularidad;
     }
 
     public String getCodigoVuelo() {
@@ -54,4 +66,12 @@ public class AsientoDTO {
     public Ubicacion getUbicacion() {
         return ubicacion;
     }
+    
+	public double getTiempoDeVuelo() {
+		return tiempoDeVuelo;
+	}
+	
+	public double getPopularidad() {
+		return popularidad;
+	}
 }
