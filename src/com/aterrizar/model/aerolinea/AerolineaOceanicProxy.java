@@ -116,6 +116,7 @@ public class AerolineaOceanicProxy extends Aerolinea {
     }
 
 	public boolean estaReservado(String codigoDeVuelo, Integer numeroDeAsiento) {
+		//Se utiliza metodo de interfaz Oceaninc
 		return this.aerolineaOceanic.estaReservado(codigoDeVuelo, numeroDeAsiento);
 	}
 
