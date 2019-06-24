@@ -115,11 +115,6 @@ public class AerolineaOceanicProxy extends Aerolinea {
 
     }
 
-	public boolean estaReservado(String codigoDeVuelo, Integer numeroDeAsiento) {
-		//Se utiliza metodo de interfaz Oceaninc
-		return this.aerolineaOceanic.estaReservado(codigoDeVuelo, numeroDeAsiento);
-	}
-
 	private String getCodigoVuelo(String codigoAsiento){
        return codigoAsiento.split("-")[0];
     }
@@ -149,7 +144,8 @@ public class AerolineaOceanicProxy extends Aerolinea {
 
 	@Override
     public boolean estaReservado(VueloAsiento vueloAsiento) {
-        String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
+		String codigoAsiento = vueloAsiento.getAsiento().getCodigoAsiento();
+		//Se utiliza metodo de interfaz Oceaninc
         return this.aerolineaOceanic.estaReservado(getCodigoVuelo(codigoAsiento), getNumeroDeAsiento(codigoAsiento));
 	}
 
