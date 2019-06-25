@@ -1,9 +1,6 @@
 package com.aterrizar.model.aterrizar;
 
-import com.aterrizar.exception.AsientoNoDisponibleException;
-import com.aterrizar.exception.AsientoYaReservadoException;
-import com.aterrizar.exception.DestinosIgualesException;
-import com.aterrizar.exception.ParametroVacioException;
+import com.aterrizar.exception.*;
 import com.aterrizar.model.aerolinea.Aerolinea;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.vueloasiento.Reserva;
@@ -14,6 +11,7 @@ import com.aterrizar.util.asiento.ReservasHelper;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Repositorio {
@@ -38,7 +36,11 @@ public class Repositorio {
         eliminarSobreReservas(vueloAsiento);
     }
 
-    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException, AsientoYaReservadoException {
+    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
+        if(usuarioEnListaEspera(vueloAsiento, usuario)) {
+            throw new UsuarioEnListaEsperaException("El usuario se encuentra en lista de espera.");
+        }
+
         Aerolinea aerolinea = vueloAsiento.getAerolinea();
 
         aerolinea.reservar(vueloAsiento, usuario);
@@ -46,8 +48,7 @@ public class Repositorio {
     }
 
     public void sobrereservar(VueloAsiento vueloAsiento, Usuario usuario) {
-        agregarSobreReserva(vueloAsiento, usuario);
-        usuario.reservar(vueloAsiento);
+        listaEspera.add(new Reserva(vueloAsiento, usuario));
     }
 
     public List<Reserva> getListaEspera(String codigoAsiento) {
@@ -56,10 +57,6 @@ public class Repositorio {
                 .filter(x -> x.getVueloAsiento().getAsiento().getCodigoAsiento().equals(codigoAsiento))
                 .sorted(Comparator.comparing(Reserva::getFechaReserva))
                 .collect(Collectors.toList());
-    }
-
-    private void agregarSobreReserva(VueloAsiento vueloAsiento, Usuario usuario) {
-        listaEspera.add(new Reserva(vueloAsiento, usuario));
     }
 
     private void eliminarSobreReserva(Reserva reserva) {
@@ -83,6 +80,17 @@ public class Repositorio {
         } else {
             usuario.eliminar(reserva);
         }
+    }
+
+    public boolean usuarioEnListaEspera(VueloAsiento vueloAsiento, Usuario usuario) {
+        Optional<Reserva> usuarioEnListaEspera = this.listaEspera
+                .stream()
+                .filter(r ->
+                        r.getUsuario().getDNI() == (usuario.getDNI()) &&
+                        r.getVueloAsiento().getAsiento().getCodigoAsiento().equals(vueloAsiento.getAsiento().getCodigoAsiento()))
+                .findAny();
+
+        return usuarioEnListaEspera.isPresent();
     }
 
     public void verificarReservasExpiradas() {

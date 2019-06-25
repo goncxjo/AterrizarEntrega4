@@ -86,7 +86,7 @@ public class BuscarAsientoViewModel {
         repositorio.comprar(vueloAsiento, usuario);
     }
 
-    public void reservarVueloAsientoSeleccionado() throws AsientoNoDisponibleException, AsientoYaReservadoException {
+    public void reservarVueloAsientoSeleccionado() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
         repositorio.reservar(vueloAsiento, usuario);
     }
 

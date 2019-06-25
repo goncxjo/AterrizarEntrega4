@@ -241,7 +241,7 @@ public class BuscarAsientoView extends LayoutView {
                 resultado = new ResultadoReserva(vm.getVueloAsientoSeleccionado());
                 resultado.mostrarResultadoOperacion();
 
-            } catch (AsientoNoDisponibleException e) {
+            } catch (AsientoNoDisponibleException | UsuarioEnListaEsperaException e) {
                 resultado = new ResultadoReserva(e.getMessage());
                 resultado.mostrarResultadoOperacion();
 

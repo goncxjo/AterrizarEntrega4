@@ -6,6 +6,7 @@ import com.aterrizar.enumerator.asiento.Estado;
 import com.aterrizar.exception.AsientoLanchitaYaReservadoException;
 import com.aterrizar.exception.AsientoNoDisponibleException;
 import com.aterrizar.exception.AsientoYaReservadoException;
+import com.aterrizar.exception.UsuarioEnListaEsperaException;
 import com.aterrizar.model.Vuelo;
 import com.aterrizar.model.aerolinea.Aerolinea;
 import com.aterrizar.model.aerolinea.AerolineaLanchita;
@@ -45,7 +46,7 @@ public class RepositorioTest {
 	}
 
 	@Test
-	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException {
+	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
 		VueloAsiento vueloAsiento = new VueloAsiento(
@@ -82,6 +83,8 @@ public class RepositorioTest {
 			repositorio.reservar(vueloAsiento, usuario);
 		} catch (AsientoYaReservadoException e) {
 			repositorio.sobrereservar(vueloAsiento, usuario);
+		} catch (UsuarioEnListaEsperaException e) {
+			e.printStackTrace();
 		}
 
 		assertTrue("No se pudo sobre reservar el asiento", !repositorio.getListaEspera(vueloAsiento.getAsiento().getCodigoAsiento()).isEmpty());
@@ -89,7 +92,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void transferir_CaeLaReservaDeUnAsientoYEsTransferidaAlPrimeroDeLaListaDeEspera() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException {
+	public void transferir_CaeLaReservaDeUnAsientoYEsTransferidaAlPrimeroDeLaListaDeEspera() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 		Usuario usuario2 = new Estandar("Jessica", "Jones", 30303456);
 		
@@ -119,7 +122,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void transferir_CaeLaReservaDeUnAsientoYLaListaDeEsperaEstaVacia() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException {
+	public void transferir_CaeLaReservaDeUnAsientoYLaListaDeEsperaEstaVacia() throws AsientoLanchitaYaReservadoException, AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 		
 		VueloAsiento vueloAsiento = new VueloAsiento(
