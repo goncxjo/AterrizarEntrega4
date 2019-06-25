@@ -15,7 +15,6 @@ import com.aterrizar.viewmodel.BuscarAsientoViewModel;
 import com.aterrizar.viewmodel.VueloAsientoTableModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class BuscarAsientoView extends LayoutView {
@@ -45,7 +44,6 @@ public class BuscarAsientoView extends LayoutView {
     private final JButton buscarButton = new JButton("Buscar");
     private final JButton comprarButton = new JButton("Comprar");
     private final JButton reservarButton = new JButton("Reservar");
-    private final JButton cerrarButton = new JButton("Cerrar");
 
     private ResultadoOperacion resultado;
     private VueloAsientoTableModel vueloAsientoTableModel;
@@ -67,53 +65,6 @@ public class BuscarAsientoView extends LayoutView {
         cerrarButton.addActionListener(e -> onCerrar());
     }
 
-    private void onReservar() {
-        if(vm.getVueloAsientoSeleccionado() != null) {
-            try {
-                vm.reservarVueloAsientoSeleccionado();
-                resultado = new ResultadoReserva(vm.getVueloAsientoSeleccionado());
-                resultado.mostrarResultadoOperacion();
-
-            } catch (AsientoNoDisponibleException e) {
-                resultado = new ResultadoReserva(e.getMessage());
-                resultado.mostrarResultadoOperacion();
-
-            } catch (AsientoYaReservadoException e) {
-                String pregunta = e.getMessage() + "\n ¿Desea sobrereservar el asiento?";
-                if (ResultadoOperacion.preguntarPorResultadoOperacion(pregunta) == JOptionPane.OK_OPTION) {
-                    vm.sobrereservarVueloAsientoSeleccionado();
-                }
-            }
-
-            onBuscar();
-        }
-    }
-
-    private void onFilaSeleccionada() {
-        int row = resultadosTabla.convertRowIndexToModel(resultadosTabla.getSelectedRow());
-        if(row > -1) {
-            VueloAsientoTableModel model = (VueloAsientoTableModel) resultadosTabla.getModel();
-            VueloAsiento data = model.getRowAt(row);
-            vm.setVueloAsiento(data);
-        }
-    }
-
-    private void onComprar() {
-        if(vm.getVueloAsientoSeleccionado() != null) {
-            try {
-                vm.comprarVueloAsientoSeleccionado();
-                resultado = new ResultadoCompra(vm.getVueloAsientoSeleccionado());
-            } catch (AsientoNoDisponibleException e) {
-                resultado = new ResultadoCompra(e.getMessage());
-            }
-
-            resultado.mostrarResultadoOperacion();
-            vm.actualizarUsuarioSiCumpleCondiciones();
-
-            onBuscar();
-        }
-    }
-
     private void crearController(Repositorio repositorio, Usuario usuario) {
         this.controller = new BuscarAsientoController();
         this.vm = controller.getModelo();
@@ -121,58 +72,22 @@ public class BuscarAsientoView extends LayoutView {
         this.vm.setUsuario(usuario);
     }
 
-    private void onBuscar() {
-        try {
-            limpiarErroresDeFiltro();
-            refrescarTabla();
 
-            vm.setFiltro(
-                    (Destino) origenComboBox.getSelectedItem()
-                    , (Destino) destinoComboBox.getSelectedItem()
-                    , fechaTextField.getText()
-                    , (TipoOrden) tipoOrdenComboBox.getSelectedItem()
-            );
-            vm.buscarAsientosDisponibles();
+    private void setErrorPanel() {
+        errorPanel.setLayout(new GridLayout(0, 1));
+        errorPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY)
+                , EMPTY_BORDER
+        ));
+        contentPane.add(errorPanel, BorderLayout.NORTH);
 
-            vueloAsientoTableModel = new VueloAsientoTableModel(vm.getVueloAsientos());
-            resultadosTabla.setModel(vueloAsientoTableModel);
-            desactivarBotoneraOperaciones(true);
-
-        } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException | NoHayAsientosDisponiblesException e) {
-            errorLabel.setText(e.getMessage());
-            desactivarBotoneraOperaciones(false);
-        }
-    }
-
-    private void desactivarBotoneraOperaciones(boolean b) {
-        comprarButton.setEnabled(b);
-        reservarButton.setEnabled(b);
-    }
-
-    private void refrescarTabla() {
-        resultadosTabla.clearSelection();
-        VueloAsientoTableModel modelo = (VueloAsientoTableModel) resultadosTabla.getModel();
-        modelo.reset();
-    }
-
-    private void limpiarErroresDeFiltro() {
-        errorLabel.setText("");
-    }
-
-    private void setBotonesPanel() {
-        botonesPanel.setLayout(new GridLayout(0,3,PADDING_0,0));
-        contentPane.add(botonesPanel, BorderLayout.SOUTH);
-
-        botonesPanel.add(comprarButton);
-        botonesPanel.add(reservarButton);
-        botonesPanel.add(cerrarButton);
-
-        desactivarBotoneraOperaciones(false);
+        errorPanel.add(errorLabel);
+        errorLabel.setForeground(Color.RED);
     }
 
     private void setAsientosPanel() {
         asientosPanel.setLayout(new GridLayout(0, 1));
-        asientosPanel.setBorder(new EmptyBorder(PADDING_0,0,PADDING_1,0));
+        asientosPanel.setBorder(EMPTY_BORDER_TOP_BOTTOM);
         contentPane.add(asientosPanel, BorderLayout.CENTER);
 
         setFiltrosPanel();
@@ -259,6 +174,103 @@ public class BuscarAsientoView extends LayoutView {
         asientosPanel.add(filtrosPanel);
     }
 
+    private void setBotonesPanel() {
+        botonesPanel.setLayout(new GridLayout(0,3,PADDING_0,0));
+        contentPane.add(botonesPanel, BorderLayout.SOUTH);
+
+        botonesPanel.add(comprarButton);
+        botonesPanel.add(reservarButton);
+        botonesPanel.add(cerrarButton);
+
+        desactivarBotoneraOperaciones(false);
+    }
+
+
+    private void onFilaSeleccionada() {
+        int row = resultadosTabla.convertRowIndexToModel(resultadosTabla.getSelectedRow());
+        if(row > -1) {
+            VueloAsientoTableModel model = (VueloAsientoTableModel) resultadosTabla.getModel();
+            VueloAsiento data = model.getRowAt(row);
+            vm.setVueloAsiento(data);
+        }
+    }
+
+    private void onBuscar() {
+        try {
+            limpiarErroresDeFiltro();
+            refrescarTabla();
+
+            vm.setFiltro(
+                    (Destino) origenComboBox.getSelectedItem()
+                    , (Destino) destinoComboBox.getSelectedItem()
+                    , fechaTextField.getText()
+                    , (TipoOrden) tipoOrdenComboBox.getSelectedItem()
+            );
+            vm.buscarAsientosDisponibles();
+
+            vueloAsientoTableModel = new VueloAsientoTableModel(vm.getVueloAsientos());
+            resultadosTabla.setModel(vueloAsientoTableModel);
+            desactivarBotoneraOperaciones(true);
+
+        } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException | NoHayAsientosDisponiblesException e) {
+            errorLabel.setText(e.getMessage());
+            desactivarBotoneraOperaciones(false);
+        }
+    }
+
+    private void onComprar() {
+        if(vm.getVueloAsientoSeleccionado() != null) {
+            try {
+                vm.comprarVueloAsientoSeleccionado();
+                resultado = new ResultadoCompra(vm.getVueloAsientoSeleccionado());
+            } catch (AsientoNoDisponibleException e) {
+                resultado = new ResultadoCompra(e.getMessage());
+            }
+
+            resultado.mostrarResultadoOperacion();
+            vm.actualizarUsuarioSiCumpleCondiciones();
+
+            onBuscar();
+        }
+    }
+
+    private void onReservar() {
+        if(vm.getVueloAsientoSeleccionado() != null) {
+            try {
+                vm.reservarVueloAsientoSeleccionado();
+                resultado = new ResultadoReserva(vm.getVueloAsientoSeleccionado());
+                resultado.mostrarResultadoOperacion();
+
+            } catch (AsientoNoDisponibleException e) {
+                resultado = new ResultadoReserva(e.getMessage());
+                resultado.mostrarResultadoOperacion();
+
+            } catch (AsientoYaReservadoException e) {
+                String pregunta = e.getMessage() + "\n ¿Desea sobrereservar el asiento?";
+                if (ResultadoOperacion.preguntarPorResultadoOperacion(pregunta) == JOptionPane.OK_OPTION) {
+                    vm.sobrereservarVueloAsientoSeleccionado();
+                }
+            }
+
+            onBuscar();
+        }
+    }
+
+    private void desactivarBotoneraOperaciones(boolean b) {
+        comprarButton.setEnabled(b);
+        reservarButton.setEnabled(b);
+    }
+
+    private void refrescarTabla() {
+        resultadosTabla.clearSelection();
+        VueloAsientoTableModel modelo = (VueloAsientoTableModel) resultadosTabla.getModel();
+        modelo.reset();
+    }
+
+    private void limpiarErroresDeFiltro() {
+        errorLabel.setText("");
+    }
+
     private JComboBox getComboBox(Destino[] destinos) {
         JComboBox<Destino> jComboBox = new JComboBox<>();
 
@@ -279,17 +291,5 @@ public class BuscarAsientoView extends LayoutView {
         jComboBox.setRenderer(new TipoOrdenComboRenderer());
 
         return jComboBox;
-    }
-
-    private void setErrorPanel() {
-        errorPanel.setLayout(new GridLayout(0, 1));
-        errorPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY)
-                , EMPTY_BORDER
-        ));
-        contentPane.add(errorPanel, BorderLayout.NORTH);
-
-        errorPanel.add(errorLabel);
-        errorLabel.setForeground(Color.RED);
     }
 }

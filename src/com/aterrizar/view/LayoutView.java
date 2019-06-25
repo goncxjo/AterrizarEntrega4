@@ -12,10 +12,16 @@ public class LayoutView extends JFrame {
     protected static final int PADDING_0 = 15;
     protected static final int PADDING_1 = 25;
     protected static final int PADDING_2 = 50;
+    protected static final EmptyBorder NO_BORDER = new EmptyBorder(0,0,0,0);
     protected static final EmptyBorder EMPTY_BORDER = new EmptyBorder(PADDING_0, PADDING_0, PADDING_0, PADDING_0);
+    protected static final EmptyBorder EMPTY_BORDER_TOP_BOTTOM = new EmptyBorder(PADDING_0, 0, PADDING_0, 0);
+    protected static final GridLayout BUTTON_1_BORDER = new GridLayout(0,1,PADDING_0,0);
+    protected static final GridLayout BUTTON_2_BORDER = new GridLayout(0,2,PADDING_0,0);
+    protected static final GridLayout BUTTON_3_BORDER = new GridLayout(0,3,PADDING_0,0);
     protected static final ImageIcon DEFAULT_ICON = new ImageIcon("global.png");
 
     protected JPanel contentPane;
+    protected final JButton cerrarButton = new JButton("Cerrar");
 
     public LayoutView() throws HeadlessException {
         configFrame(WIDTH, HEIGHT);

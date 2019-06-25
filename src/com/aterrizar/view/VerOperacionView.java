@@ -4,7 +4,6 @@ import com.aterrizar.viewmodel.OperacionTableModel;
 import com.aterrizar.viewmodel.UsuarioOperacionViewModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class VerOperacionView extends LayoutView {
@@ -14,13 +13,12 @@ public class VerOperacionView extends LayoutView {
     protected final JPanel buttonPanel = new JPanel();
     protected final JLabel usuarioLabel = new JLabel();
     protected final JTable operacionesTabla = new JTable();
-    protected final JButton cerrarButton = new JButton("Cerrar");
 
     public VerOperacionView(UsuarioOperacionViewModel vm) throws HeadlessException {
         super();
 
         textPanel.setLayout(new GridLayout(0, 2));
-        textPanel.setBorder(new EmptyBorder(0,0,0,0));
+        textPanel.setBorder(NO_BORDER);
         contentPane.add(textPanel, BorderLayout.NORTH);
 
         usuarioLabel.setText(vm.getTipoOperacion() + " de " + vm.getUsuario().getNombreCompleto());
@@ -28,14 +26,15 @@ public class VerOperacionView extends LayoutView {
         textPanel.add(new JLabel(getResizedImage(vm.getTipoOperacion() + ".png", 50, 50), JLabel.RIGHT));
 
         operacionesPanel.setLayout(new GridLayout(0, 1));
-        operacionesPanel.setBorder(new EmptyBorder(25,0,25,0));
+        operacionesPanel.setBorder(EMPTY_BORDER_TOP_BOTTOM);
         contentPane.add(operacionesPanel, BorderLayout.CENTER);
 
         operacionesPanel.add(new JScrollPane(operacionesTabla));
         operacionesTabla.setModel(new OperacionTableModel(vm));
 
-        buttonPanel.setLayout(new GridLayout(0,3,15,0));
+        buttonPanel.setLayout(BUTTON_3_BORDER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
+        buttonPanel.add(cerrarButton);
 
         cerrarButton.addActionListener(e -> onCerrar());
     }
