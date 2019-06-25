@@ -103,9 +103,9 @@ public class RepositorioTest {
 
 		try {
 			Mockito.doThrow(AsientoYaReservadoException.class).when(mockLanchita).reservar(anyString(),anyString());
-			repositorio.reservar(vueloAsiento, usuario);
+			repositorio.reservar(vueloAsiento, usuario2);
 		} catch (AsientoYaReservadoException e) {
-			repositorio.sobrereservar(vueloAsiento, usuario);
+			repositorio.sobrereservar(vueloAsiento, usuario2);
 		}
 		boolean listaDeEsperaAntesDeTransferir = repositorio.getListaEspera(vueloAsiento.getAsiento().getCodigoAsiento()).isEmpty();
 		
