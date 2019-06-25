@@ -61,4 +61,6 @@ public abstract class Asiento {
         String numeroAsiento = codigoAsiento.split("-")[1];
         return Integer.parseInt(numeroAsiento);
     }
+
+    public abstract String getNombreTipoAsiento();
 }

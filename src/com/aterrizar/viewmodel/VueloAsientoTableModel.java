@@ -46,7 +46,7 @@ public class VueloAsientoTableModel extends AbstractTableModel {
             case 4:
                 return entity.getAsiento().getUbicacion();
             case 5:
-                return entity.getAsiento().toString();
+                return entity.getAsiento().getNombreTipoAsiento();
             default:
                 return "";
         }

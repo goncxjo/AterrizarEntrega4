@@ -12,7 +12,7 @@ public class Turista extends Asiento {
     }
 
     @Override
-    public String toString() {
+    public String getNombreTipoAsiento() {
         return "Turismo";
     }
 }

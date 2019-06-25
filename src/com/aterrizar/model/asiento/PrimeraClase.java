@@ -13,9 +13,10 @@ public class PrimeraClase extends Asiento {
     }
 
     @Override
-    public String toString() {
+    public String getNombreTipoAsiento() {
         return "Primera Clase";
     }
+
 }
 
 

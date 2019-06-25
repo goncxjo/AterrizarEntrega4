@@ -13,7 +13,7 @@ public class Ejecutivo extends Asiento {
     }
 
     @Override
-    public String toString() {
+    public String getNombreTipoAsiento() {
         return "Ejecutivo";
     }
 }
