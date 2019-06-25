@@ -11,7 +11,7 @@ import com.aterrizar.util.date.PatternDoesntMatchException;
 import com.aterrizar.util.operation.ResultadoCompra;
 import com.aterrizar.util.operation.ResultadoOperacion;
 import com.aterrizar.util.operation.ResultadoReserva;
-import com.aterrizar.viewmodel.BuscarAsientoViewModel;
+import com.aterrizar.viewmodel.BuscarAsientosViewModel;
 import com.aterrizar.viewmodel.VueloAsientoTableModel;
 
 import javax.swing.*;
@@ -20,7 +20,7 @@ import java.awt.*;
 public class BuscarAsientoView extends LayoutView {
 
     BuscarAsientoController controller;
-    BuscarAsientoViewModel vm;
+    BuscarAsientosViewModel vm;
 
     private final JPanel errorPanel = new JPanel();
     private final JPanel asientosPanel = new JPanel();

@@ -1,20 +1,20 @@
 package com.aterrizar.controller;
 
-import com.aterrizar.viewmodel.BuscarAsientoViewModel;
+import com.aterrizar.viewmodel.BuscarAsientosViewModel;
 
 public class BuscarAsientoController {
 
-    public BuscarAsientoViewModel modelo;
+    public BuscarAsientosViewModel modelo;
 
     public BuscarAsientoController() {
-        this.modelo = new BuscarAsientoViewModel();
+        this.modelo = new BuscarAsientosViewModel();
     }
 
-    public BuscarAsientoViewModel getModelo() {
+    public BuscarAsientosViewModel getModelo() {
         return modelo;
     }
 
-    public void setModelo(BuscarAsientoViewModel modelo) {
+    public void setModelo(BuscarAsientosViewModel modelo) {
         this.modelo = modelo;
     }
 }

@@ -14,7 +14,7 @@ import com.aterrizar.util.date.PatternDoesntMatchException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuscarAsientoViewModel {
+public class BuscarAsientosViewModel {
     public Usuario usuario;
     public VueloAsientoFiltro filtro;
     public List<VueloAsiento> vueloAsientos = new ArrayList<>();
