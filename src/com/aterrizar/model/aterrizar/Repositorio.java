@@ -47,11 +47,11 @@ public class Repositorio {
 
     private void validarReserva(VueloAsiento vueloAsiento, Usuario usuario) throws UsuarioYaHizoReservaException, UsuarioEnListaEsperaException {
         if(usuario.yaHizoReserva(vueloAsiento)) {
-            throw new UsuarioYaHizoReservaException("El usuario ya reservó el asiento.");
+            throw new UsuarioYaHizoReservaException("El usuario ya reservó el asiento");
         }
 
         if(usuarioEnListaEspera(vueloAsiento, usuario)) {
-            throw new UsuarioEnListaEsperaException("El usuario se encuentra en lista de espera.");
+            throw new UsuarioEnListaEsperaException("El usuario se encuentra en lista de espera");
         }
     }
 

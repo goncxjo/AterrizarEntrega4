@@ -104,6 +104,31 @@ public class RepositorioTest {
 		repositorio.comprar(vueloAsiento, usuario);
 	}
 
+	@Test(expected = UsuarioEnListaEsperaException.class)
+	public void reservar_UsuarioNoPuedeVolverASobrereservar() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException, AsientoLanchitaYaReservadoException {
+		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
+
+		VueloAsiento vueloAsiento = new VueloAsiento(
+				aerolineaOceanicProxy
+				, new Vuelo(Destino.EZE, Destino.MIA, DateHelper.parseToDate("13/05/2019"), 10.0, 5.0)
+				, new Ejecutivo("LCH 005-40", 50000, Ubicacion.Centro, Estado.Disponible)
+		);
+
+		try {
+			Mockito.doThrow(AsientoYaReservadoException.class).when(mockLanchita).reservar(anyString(),anyString());
+			repositorio.reservar(vueloAsiento, usuario);
+		} catch (AsientoYaReservadoException e) {
+			repositorio.sobrereservar(vueloAsiento, usuario);
+		}
+
+		try {
+			Mockito.doThrow(AsientoYaReservadoException.class).when(mockLanchita).reservar(anyString(),anyString());
+			repositorio.reservar(vueloAsiento, usuario);
+		} catch (AsientoYaReservadoException e) {
+			repositorio.sobrereservar(vueloAsiento, usuario);
+		}
+	}
+
 	@Test
 	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
@@ -121,11 +146,10 @@ public class RepositorioTest {
 		repositorio.reservar(vueloAsiento, usuario);
 
 		when(mockOceanic.estaReservado(anyString(), anyInt())).thenReturn(true);
-        boolean estaReservadoDespuesDeReservar = repositorio.estaReservado(vueloAsiento);
-        
+		boolean estaReservadoDespuesDeReservar = repositorio.estaReservado(vueloAsiento);
+
 		assertTrue("No se pudo reservar el asiento", !estaReservadoAntesDeReservar && estaReservadoDespuesDeReservar);
 	}
-	
 	
 	@Test
 	public void reservar_SeSobrereservaUnAsientoYaReservado() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, UsuarioYaHizoReservaException, UsuarioEnListaEsperaException {
