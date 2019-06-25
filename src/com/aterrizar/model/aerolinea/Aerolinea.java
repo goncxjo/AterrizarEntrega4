@@ -103,16 +103,20 @@ public abstract class Aerolinea {
     }
 
     public Aerolinea buscarSuperOfertas(Usuario usuario) {
+        marcarSuperOfertas(usuario);
+
+        this.vueloAsientos.removeIf(va -> va.getAsiento().esSuperOferta() && !usuario.esVIP());
+
+        return this;
+    }
+
+    private void marcarSuperOfertas(Usuario usuario) {
         for (VueloAsiento vueloAsiento : this.vueloAsientos) {
             Asiento asiento = vueloAsiento.getAsiento();
             if (asiento.esSuperOferta(usuario)) {
                 asiento.marcarComoSuperOferta();
             }
         }
-
-        this.vueloAsientos.removeIf(va -> va.getAsiento().esSuperOferta() && !usuario.esVIP());
-
-        return this;
     }
 
     protected VueloAsiento getVueloAsiento(String codigoAsiento) throws AsientoNoDisponibleException {
