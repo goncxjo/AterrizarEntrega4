@@ -79,6 +79,31 @@ public class RepositorioTest {
 		assertTrue("No se pudo comprar el asiento", !vueloAsientosAntesDeComprar.isEmpty() && vueloAsientosDespuesDeComprar.isEmpty());
 	}
 
+	@Test(expected = AsientoNoDisponibleException.class)
+	public void comprar_NoSePuedeComprarAsientoQueNoExiste() throws AsientoNoDisponibleException, DestinosIgualesException, ParametroVacioException {
+		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
+
+		when(mockOceanic.asientosDisponiblesParaOrigenYDestino(anyString(), anyString(), anyString()))
+				.thenReturn(Arrays.asList(
+						new AsientoDTO("OCE 001", 1, DateHelper.parseFromISO8601("31/12/2019"), null, 1000000, new Ejecutivo(), Ubicacion.Centro, 10.0, 3.0)
+				));
+
+		aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+		//Se crea filtro de busqueda
+		VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+				.agregarOrigen(Destino.BUE)
+				.agregarDestino(Destino.LA)
+				.agregarFecha("31/12/2019")
+				.build();
+
+		when(mockOceanic.comprarSiHayDisponibilidad(anyString(), anyString(), anyInt())).thenReturn(false);
+
+		List<VueloAsiento> vueloAsientos = repositorio.getVueloAsientos(filtro, usuario);
+		VueloAsiento vueloAsiento = vueloAsientos.get(0);
+		repositorio.comprar(vueloAsiento, usuario);
+	}
+
 	@Test
 	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
@@ -103,7 +128,7 @@ public class RepositorioTest {
 	
 	
 	@Test
-	public void reservar_ReservaUnAsientoNoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException, UsuarioYaHizoReservaException, UsuarioEnListaEsperaException {
+	public void reservar_SeSobrereservaUnAsientoYaReservado() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, UsuarioYaHizoReservaException, UsuarioEnListaEsperaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
 		VueloAsiento vueloAsiento = new VueloAsiento(
