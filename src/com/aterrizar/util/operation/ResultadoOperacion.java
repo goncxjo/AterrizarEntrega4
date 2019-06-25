@@ -54,16 +54,21 @@ public abstract class ResultadoOperacion {
                 , tipoMensaje
                 , null
                 , opciones
-                , opciones[0]);
+                , opciones[0]
+        );
     }
 
     public static int preguntarPorResultadoOperacion(String pregunta) {
-        return JOptionPane.showConfirmDialog(
+        Object[] options = {"Sí", "No"};
+        return JOptionPane.showOptionDialog(
                 null
                 , pregunta
                 , "Pregunta"
                 , JOptionPane.YES_NO_OPTION
                 , JOptionPane.QUESTION_MESSAGE
+                , null
+                , options
+                , options[0]
         );
     }
 }
