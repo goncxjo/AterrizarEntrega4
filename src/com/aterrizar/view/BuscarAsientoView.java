@@ -241,7 +241,7 @@ public class BuscarAsientoView extends LayoutView {
                 resultado = new ResultadoReserva(vm.getVueloAsientoSeleccionado());
                 resultado.mostrarResultadoOperacion();
 
-            } catch (AsientoNoDisponibleException | UsuarioEnListaEsperaException e) {
+            } catch (AsientoNoDisponibleException | UsuarioEnListaEsperaException | UsuarioYaHizoReservaException e) {
                 resultado = new ResultadoReserva(e.getMessage());
                 resultado.mostrarResultadoOperacion();
 
@@ -262,6 +262,8 @@ public class BuscarAsientoView extends LayoutView {
     }
 
     private void refrescarTabla() {
+        resultadosTabla.revalidate();
+        resultadosTabla.repaint();
         resultadosTabla.clearSelection();
         VueloAsientoTableModel modelo = (VueloAsientoTableModel) resultadosTabla.getModel();
         modelo.reset();

@@ -36,15 +36,23 @@ public class Repositorio {
         eliminarSobreReservas(vueloAsiento);
     }
 
-    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException {
-        if(usuarioEnListaEspera(vueloAsiento, usuario)) {
-            throw new UsuarioEnListaEsperaException("El usuario se encuentra en lista de espera.");
-        }
+    public void reservar(VueloAsiento vueloAsiento, Usuario usuario) throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
+        validarReserva(vueloAsiento, usuario);
 
         Aerolinea aerolinea = vueloAsiento.getAerolinea();
 
         aerolinea.reservar(vueloAsiento, usuario);
         usuario.reservar(vueloAsiento);
+    }
+
+    private void validarReserva(VueloAsiento vueloAsiento, Usuario usuario) throws UsuarioYaHizoReservaException, UsuarioEnListaEsperaException {
+        if(usuario.yaHizoReserva(vueloAsiento)) {
+            throw new UsuarioYaHizoReservaException("El usuario ya reservó el asiento.");
+        }
+
+        if(usuarioEnListaEspera(vueloAsiento, usuario)) {
+            throw new UsuarioEnListaEsperaException("El usuario se encuentra en lista de espera.");
+        }
     }
 
     public void sobrereservar(VueloAsiento vueloAsiento, Usuario usuario) {
@@ -119,10 +127,9 @@ public class Repositorio {
                             .buscarSuperOfertas(usuario)
                             .getVueloAsientos()
             );
-            this.vueloAsientos.sort(filtro.getTipoOrden()::sort);
         }
-
         usuario.agregarFiltroAlHistorial(filtro);
+        this.vueloAsientos.sort(filtro.getTipoOrden()::sort);
 
         return this.vueloAsientos;
     }

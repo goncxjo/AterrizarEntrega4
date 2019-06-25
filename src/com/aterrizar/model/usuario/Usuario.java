@@ -8,6 +8,7 @@ import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Usuario {
     protected String nombre;
@@ -101,5 +102,14 @@ public abstract class Usuario {
     public void transferir(Reserva reserva, Usuario otroUsuario) {
         eliminarReserva(reserva.getVueloAsiento().getAsiento().getCodigoAsiento());
         otroUsuario.reservar(reserva.getVueloAsiento());
+    }
+
+    public boolean yaHizoReserva(VueloAsiento vueloAsiento) {
+        Optional<Reserva> reserva = this.reservas
+                .stream()
+                .filter(r -> r.getVueloAsiento().getAsiento().getCodigoAsiento().equals(vueloAsiento.getAsiento().getCodigoAsiento()))
+                .findAny();
+
+        return reserva.isPresent();
     }
 }
