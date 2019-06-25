@@ -5,14 +5,15 @@ import com.aterrizar.enumerator.Ubicacion;
 import com.aterrizar.enumerator.asiento.Estado;
 import com.aterrizar.exception.*;
 import com.aterrizar.model.Vuelo;
-import com.aterrizar.model.aerolinea.Aerolinea;
-import com.aterrizar.model.aerolinea.AerolineaLanchita;
-import com.aterrizar.model.aerolinea.AerolineaLanchitaProxy;
+import com.aterrizar.model.aerolinea.*;
+import com.aterrizar.model.asiento.AsientoDTO;
 import com.aterrizar.model.asiento.Ejecutivo;
 import com.aterrizar.model.usuario.Estandar;
 import com.aterrizar.model.usuario.Usuario;
 import com.aterrizar.model.vueloasiento.Reserva;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
+import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
+import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
 import com.aterrizar.util.date.DateHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,45 +21,81 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 public class RepositorioTest {
 	private Repositorio repositorio;
 	@Mock AerolineaLanchita mockLanchita;
+	@Mock AerolineaOceanic mockOceanic;
 	AerolineaLanchitaProxy aerolineaLanchitaProxy;
+	AerolineaOceanicProxy aerolineaOceanicProxy;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		aerolineaLanchitaProxy = new AerolineaLanchitaProxy(mockLanchita);
-		List<Aerolinea> aerolineasProxy = Arrays.asList(aerolineaLanchitaProxy);
+		aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+		List<Aerolinea> aerolineasProxy = Arrays.asList(aerolineaLanchitaProxy, aerolineaOceanicProxy);
 		repositorio = new Repositorio(aerolineasProxy);
 	}
 
 	@Test
-	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoLanchitaYaReservadoException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
+	public void comprar_CompraUnAsientoDisponible() throws AsientoNoDisponibleException, DestinosIgualesException, ParametroVacioException {
+		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
+
+		when(mockOceanic.asientosDisponiblesParaOrigenYDestino(anyString(), anyString(), anyString()))
+				.thenReturn(Arrays.asList(
+						new AsientoDTO("OCE 001", 1, DateHelper.parseFromISO8601("31/12/2019"), null, 1000000, new Ejecutivo(), Ubicacion.Centro, 10.0, 3.0)
+				));
+
+		aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+
+		//Se crea filtro de busqueda
+		VueloAsientoFiltro filtro = new VueloAsientoFiltroBuilder()
+				.agregarOrigen(Destino.BUE)
+				.agregarDestino(Destino.LA)
+				.agregarFecha("31/12/2019")
+				.build();
+
+		doAnswer(invocationOnMock -> {
+			when(mockOceanic.asientosDisponiblesParaOrigenYDestino(anyString(), anyString(), anyString()))
+					.thenAnswer(i -> Arrays.asList());
+			this.aerolineaOceanicProxy = new AerolineaOceanicProxy(mockOceanic);
+			return true; // ESTA DISPONIBLE
+		}).when(mockOceanic).comprarSiHayDisponibilidad(anyString(), anyString(), anyInt());
+
+		List<VueloAsiento> vueloAsientosAntesDeComprar = new ArrayList<>();
+		vueloAsientosAntesDeComprar.addAll(repositorio.getVueloAsientos(filtro, usuario));
+		VueloAsiento vueloAsiento = vueloAsientosAntesDeComprar.get(0);
+		repositorio.comprar(vueloAsiento, usuario);
+		List<VueloAsiento> vueloAsientosDespuesDeComprar = repositorio.getVueloAsientos(filtro, usuario);
+
+		assertTrue("No se pudo comprar el asiento", !vueloAsientosAntesDeComprar.isEmpty() && vueloAsientosDespuesDeComprar.isEmpty());
+	}
+
+	@Test
+	public void reservar_ReservaUnAsientoDisponible() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
 		Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort", 37422007);
 
 		VueloAsiento vueloAsiento = new VueloAsiento(
-				aerolineaLanchitaProxy
+				aerolineaOceanicProxy
 				, new Vuelo(Destino.EZE, Destino.MIA, DateHelper.parseToDate("13/05/2019"), 10.0, 5.0)
 				, new Ejecutivo("LCH 005-40", 50000, Ubicacion.Centro, Estado.Disponible)
-				);
+		);
 
-		when(mockLanchita.estaReservado(anyString())).thenReturn(false);
+		when(mockOceanic.estaReservado(anyString(), anyInt())).thenReturn(false);
 		boolean estaReservadoAntesDeReservar = repositorio.estaReservado(vueloAsiento);
 
-		doNothing().when(mockLanchita).reservar(anyObject(), anyString());
+		when((mockOceanic.reservar(anyObject(), anyString(), anyInt()))).thenReturn(true);
 		repositorio.reservar(vueloAsiento, usuario);
 
-		when(mockLanchita.estaReservado(anyString())).thenReturn(true);
+		when(mockOceanic.estaReservado(anyString(), anyInt())).thenReturn(true);
         boolean estaReservadoDespuesDeReservar = repositorio.estaReservado(vueloAsiento);
         
 		assertTrue("No se pudo reservar el asiento", !estaReservadoAntesDeReservar && estaReservadoDespuesDeReservar);
