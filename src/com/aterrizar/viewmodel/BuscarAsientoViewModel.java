@@ -18,7 +18,7 @@ public class BuscarAsientoViewModel {
     public Usuario usuario;
     public VueloAsientoFiltro filtro;
     public List<VueloAsiento> vueloAsientos = new ArrayList<>();
-    public VueloAsiento vueloAsiento;
+    public VueloAsiento vueloAsientoSeleccionado;
 
     private Repositorio repositorio;
 
@@ -47,10 +47,6 @@ public class BuscarAsientoViewModel {
                 .build();
     }
 
-    public VueloAsiento getVueloAsiento() {
-        return vueloAsiento;
-    }
-
     public Repositorio getRepositorio() {
         return repositorio;
     }
@@ -75,23 +71,23 @@ public class BuscarAsientoViewModel {
     }
 
     public VueloAsiento getVueloAsientoSeleccionado() {
-        return vueloAsiento;
+        return vueloAsientoSeleccionado;
     }
 
-    public void setVueloAsiento(VueloAsiento vueloAsiento) {
-        this.vueloAsiento = vueloAsiento;
+    public void setVueloAsientoSeleccionado(VueloAsiento vueloAsientoSeleccionado) {
+        this.vueloAsientoSeleccionado = vueloAsientoSeleccionado;
     }
 
     public void comprarVueloAsientoSeleccionado() throws AsientoNoDisponibleException {
-        repositorio.comprar(vueloAsiento, usuario);
+        repositorio.comprar(vueloAsientoSeleccionado, usuario);
     }
 
     public void reservarVueloAsientoSeleccionado() throws AsientoNoDisponibleException, AsientoYaReservadoException, UsuarioEnListaEsperaException, UsuarioYaHizoReservaException {
-        repositorio.reservar(vueloAsiento, usuario);
+        repositorio.reservar(vueloAsientoSeleccionado, usuario);
     }
 
     public void sobrereservarVueloAsientoSeleccionado() {
-        repositorio.sobrereservar(vueloAsiento, usuario);
+        repositorio.sobrereservar(vueloAsientoSeleccionado, usuario);
     }
 
     public void actualizarUsuarioSiCumpleCondiciones() {

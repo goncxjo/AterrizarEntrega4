@@ -63,18 +63,18 @@ public class ComunicadorTest {
 //				.agregarUbicacion(Ubicacion.Ventanilla)
 //				.build();
 //
-//		VueloAsiento vueloAsiento = comunicador
+//		VueloAsiento vueloAsientoSeleccionado = comunicador
 //				.filtrarAsientos(filtro, usuario)
 //				.getVueloAsientos()
 //				.get(0);
 //
-//		this.comunicador.comprar(vueloAsiento, usuario);
+//		this.comunicador.comprar(vueloAsientoSeleccionado, usuario);
 //
 //		List<VueloAsiento> asientosLuegoDeComprar = comunicador
 //				.filtrarAsientos(filtro, usuario)
 //				.getVueloAsientos();
 //
-//		assertFalse("El usuario no ha podido comprar el asiento.", asientosLuegoDeComprar.contains(vueloAsiento));
+//		assertFalse("El usuario no ha podido comprar el asiento.", asientosLuegoDeComprar.contains(vueloAsientoSeleccionado));
 //	}
 //
 //	@Test
@@ -99,7 +99,7 @@ public class ComunicadorTest {
 //				.agregarUbicacion(Ubicacion.Ventanilla)
 //				.build();
 //
-//		VueloAsiento vueloAsiento = comunicador
+//		VueloAsiento vueloAsientoSeleccionado = comunicador
 //				.filtrarAsientos(filtro, usuario)
 //				.getVueloAsientos()
 //				.get(0);
@@ -108,7 +108,7 @@ public class ComunicadorTest {
 //				.filtrarAsientos(filtro, usuario)
 //				.getVueloAsientos();
 //
-//		comunicador.comprar(vueloAsiento, usuario);
+//		comunicador.comprar(vueloAsientoSeleccionado, usuario);
 //
 //		List<VueloAsiento> vueloAsientosDespuesDeComprar = comunicador
 //				.filtrarAsientos(filtro, usuario)

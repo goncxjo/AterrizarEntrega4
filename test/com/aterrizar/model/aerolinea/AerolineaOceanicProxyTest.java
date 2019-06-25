@@ -201,7 +201,7 @@ public class AerolineaOceanicProxyTest {
         //Se crea el usuario
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
         
-        //Se crea el vueloAsiento
+        //Se crea el vueloAsientoSeleccionado
         VueloAsiento vueloAsiento = aerolineaOceanicProxy
 				.filtrarAsientos(filtro, usuario)
 				.getVueloAsientos()
@@ -233,7 +233,7 @@ public class AerolineaOceanicProxyTest {
         //Se crea el usuario
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
         
-        //Se crea el vueloAsiento
+        //Se crea el vueloAsientoSeleccionado
         VueloAsiento vueloAsiento = aerolineaOceanicProxy
 				.filtrarAsientos(filtro, usuario)
 				.getVueloAsientos()
@@ -279,7 +279,7 @@ public class AerolineaOceanicProxyTest {
         //Se crea el usuario
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
         
-        //Se crea el vueloAsiento
+        //Se crea el vueloAsientoSeleccionado
         VueloAsiento vueloAsiento = aerolineaOceanicProxy
 				.filtrarAsientos(filtro, usuario)
 				.getVueloAsientos()
@@ -370,7 +370,7 @@ public class AerolineaOceanicProxyTest {
         //Se crea el usuario
         Usuario usuario = new Estandar("Ricardo \"EL COMANDANTE\"", "Fort)", 37422007);
         
-      //Se crea el vueloAsiento
+      //Se crea el vueloAsientoSeleccionado
         VueloAsiento vueloAsiento = aerolineaOceanicProxy
 				.filtrarAsientos(filtro, usuario)
 				.getVueloAsientos()

@@ -191,7 +191,7 @@ public class BuscarAsientoView extends LayoutView {
         if(row > -1) {
             VueloAsientoTableModel model = (VueloAsientoTableModel) resultadosTabla.getModel();
             VueloAsiento data = model.getRowAt(row);
-            vm.setVueloAsiento(data);
+            vm.setVueloAsientoSeleccionado(data);
         }
     }
 
