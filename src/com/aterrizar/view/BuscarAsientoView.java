@@ -108,6 +108,7 @@ public class BuscarAsientoView extends LayoutView {
             }
 
             resultado.mostrarResultadoOperacion();
+            vm.actualizarUsuarioSiCumpleCondiciones();
 
             onBuscar();
         }

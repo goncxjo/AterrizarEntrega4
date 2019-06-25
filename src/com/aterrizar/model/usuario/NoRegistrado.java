@@ -25,4 +25,9 @@ public class NoRegistrado extends Usuario {
         }
         return new Estandar(this);
     }
+
+    @Override
+    public boolean puedeSerUsuarioVIP() {
+        return false;
+    }
 }

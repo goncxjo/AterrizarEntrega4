@@ -29,6 +29,7 @@ public abstract class Usuario {
         this.DNI = usuario.getDNI();
         this.historialBusquedas = usuario.getHistorialBusquedas();
         this.historialCompras = usuario.getHistorialCompras();
+        this.reservas = usuario.getReservas();
     }
 
     public Usuario() {}
@@ -78,6 +79,8 @@ public abstract class Usuario {
     public Usuario actualizarTipo(Usuario nuevoUsuario) throws TipoUsuarioNoDisponibleException {
         throw new TipoUsuarioNoDisponibleException("No existe el usuario solicitado");
     }
+
+    public abstract boolean puedeSerUsuarioVIP();
 
     public List<Reserva> getReservas() {
         return reservas;

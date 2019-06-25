@@ -40,4 +40,9 @@ public class VIP extends Usuario {
 
         return usuario;
     }
+
+    @Override
+    public boolean puedeSerUsuarioVIP() {
+        return false;
+    }
 }

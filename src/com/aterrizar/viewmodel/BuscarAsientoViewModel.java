@@ -5,6 +5,7 @@ import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.exception.*;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
+import com.aterrizar.model.usuario.VIP;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltro;
 import com.aterrizar.model.vueloasiento.VueloAsientoFiltroBuilder;
@@ -91,5 +92,15 @@ public class BuscarAsientoViewModel {
 
     public void sobrereservarVueloAsientoSeleccionado() {
         repositorio.sobrereservar(vueloAsiento, usuario);
+    }
+
+    public void actualizarUsuarioSiCumpleCondiciones() {
+        try {
+            if(usuario.puedeSerUsuarioVIP()) {
+                usuario = usuario.actualizarTipo(new VIP());
+            }
+        } catch (TipoUsuarioNoDisponibleException e) {
+            // TODO: ver qué hacer con esta excepción
+        }
     }
 }

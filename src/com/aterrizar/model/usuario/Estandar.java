@@ -15,6 +15,7 @@ public class Estandar extends Usuario {
         super(usuario);
     }
 
+    @Override
     public boolean puedeSerUsuarioVIP() {
         boolean esVIP = false;
         if(!this.historialCompras.isEmpty()) {
