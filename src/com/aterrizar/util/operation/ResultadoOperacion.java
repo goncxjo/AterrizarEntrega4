@@ -63,7 +63,7 @@ public abstract class ResultadoOperacion {
                 , pregunta
                 , "Pregunta"
                 , JOptionPane.YES_NO_OPTION
-                , JOptionPane.INFORMATION_MESSAGE
+                , JOptionPane.QUESTION_MESSAGE
         );
     }
 }
