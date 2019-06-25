@@ -2,6 +2,7 @@ package com.aterrizar.model.asiento;
 
 import com.aterrizar.enumerator.Ubicacion;
 import com.aterrizar.enumerator.asiento.Estado;
+import com.aterrizar.model.usuario.Usuario;
 
 public abstract class Asiento {
     protected String codigoAsiento;
@@ -63,4 +64,14 @@ public abstract class Asiento {
     }
 
     public abstract String getNombreTipoAsiento();
+
+    public boolean esSuperOferta(Usuario usuario) {
+        boolean esSuperOferta = false;
+
+        if((this instanceof PrimeraClase && precio + usuario.getRecargo() < 8000) || (this instanceof Ejecutivo && precio + usuario.getRecargo() < 4000)) {
+            esSuperOferta = true;
+        }
+
+        return esSuperOferta;
+    }
 }

@@ -21,9 +21,9 @@ public class LanchitaDummy implements AerolineaLanchita {
         diccionarioDestinos.put("XXX", "000");
 
         this.asientos = new ArrayList<>();
-        asientos.add(Arrays.asList("LCH 079-42","1000.00","T","V","D", "12.0", "6.0"));
-        asientos.add(Arrays.asList("LCH 079-46","1400.00","T","C","D", "12.0", "4.0"));
-        asientos.add(Arrays.asList("LCH 079-12","2000.00","P","C","D", "10.0", "4.0"));
+        asientos.add(Arrays.asList("LCH 079-42","10000.00","T","V","D", "12.0", "6.0"));
+        asientos.add(Arrays.asList("LCH 079-46","14000.00","T","C","D", "12.0", "4.0"));
+        asientos.add(Arrays.asList("LCH 079-12","20000.00","P","C","D", "10.0", "4.0"));
         asientos.add(Arrays.asList("LCH 079-37","1700.00","E","C","R", "11.0", "2.0"));
         asientos.add(Arrays.asList("LCH 037-35","120000.00","P","P","D", "1.0", "1.0"));
         asientos.add(Arrays.asList("LCH 177-42","1000.00","T","V","D", "12.0", "6.0"));
@@ -31,7 +31,7 @@ public class LanchitaDummy implements AerolineaLanchita {
         asientos.add(Arrays.asList("LCH 177-12","2000.00","P","C","R", "10.0", "4.0"));
         asientos.add(Arrays.asList("LCH 177-35","1800.00","P","P","D", "13.0", "1.0"));
         asientos.add(Arrays.asList("LCH 177-37","1700.00","E","C","D", "11.0", "2.0"));
-        asientos.add(Arrays.asList("LCH 266-46","1400.00","T","C","D", "12.0", "4.0"));
+        asientos.add(Arrays.asList("LCH 266-46","14000.00","T","C","D", "12.0", "4.0"));
         asientos.add(Arrays.asList("LCH 266-12","2000.00","P","C","D", "10.0", "4.0"));
     }
 

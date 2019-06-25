@@ -104,10 +104,13 @@ public abstract class Aerolinea {
 
     public Aerolinea buscarSuperOfertas(Usuario usuario) {
         for (VueloAsiento vueloAsiento : this.vueloAsientos) {
-            if (usuario.puedeVerSuperOferta(vueloAsiento.getAsiento())) {
-                vueloAsiento.getAsiento().marcarComoSuperOferta();
+            Asiento asiento = vueloAsiento.getAsiento();
+            if (asiento.esSuperOferta(usuario)) {
+                asiento.marcarComoSuperOferta();
             }
         }
+
+        this.vueloAsientos.removeIf(va -> va.getAsiento().esSuperOferta() && !usuario.esVIP());
 
         return this;
     }

@@ -1,9 +1,6 @@
 package com.aterrizar.model.usuario;
 
 import com.aterrizar.exception.TipoUsuarioNoDisponibleException;
-import com.aterrizar.model.asiento.Asiento;
-import com.aterrizar.model.asiento.Ejecutivo;
-import com.aterrizar.model.asiento.PrimeraClase;
 
 public class VIP extends Usuario {
 
@@ -16,16 +13,6 @@ public class VIP extends Usuario {
 
     public VIP(Usuario usuario) {
         super(usuario);
-    }
-
-    public boolean puedeVerSuperOferta(Asiento asiento) {
-        boolean puedeVerSuperOferta = false;
-
-        if((asiento instanceof PrimeraClase && asiento.getPrecio() + this.getRecargo() < 8000) || (asiento instanceof Ejecutivo && asiento.getPrecio() + this.getRecargo() < 4000)) {
-            puedeVerSuperOferta = true;
-        }
-
-        return puedeVerSuperOferta;
     }
 
     @Override
@@ -45,4 +32,7 @@ public class VIP extends Usuario {
     public boolean puedeSerUsuarioVIP() {
         return false;
     }
+
+    @Override
+    public boolean esVIP() { return true; }
 }

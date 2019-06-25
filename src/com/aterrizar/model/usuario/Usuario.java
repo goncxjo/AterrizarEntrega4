@@ -75,7 +75,7 @@ public abstract class Usuario {
 
     public float getRecargo() { return 0; }
 
-    public boolean puedeVerSuperOferta(Asiento asiento) { return false; }
+    public boolean esSuperOferta(Asiento asiento) { return false; }
 
     public Usuario actualizarTipo(Usuario nuevoUsuario) throws TipoUsuarioNoDisponibleException {
         throw new TipoUsuarioNoDisponibleException("No existe el usuario solicitado");
@@ -112,4 +112,6 @@ public abstract class Usuario {
 
         return reserva.isPresent();
     }
+
+    public boolean esVIP() { return false; }
 }
