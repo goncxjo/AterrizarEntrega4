@@ -2,6 +2,7 @@ package com.aterrizar.model.vueloasiento;
 
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.enumerator.Ubicacion;
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.model.asiento.Asiento;
 
 public class VueloAsientoFiltro {
@@ -10,6 +11,7 @@ public class VueloAsientoFiltro {
     private String fecha;
     private Asiento tipoAsiento;
     private Ubicacion ubicacion;
+    private TipoOrden tipoOrden;
 
     public Destino getOrigen() {
         return origen;
@@ -45,5 +47,16 @@ public class VueloAsientoFiltro {
 
     public void setUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public TipoOrden getTipoOrden() {
+        if(tipoOrden == null) {
+            return TipoOrden.superOferta;
+        }
+        return tipoOrden;
+    }
+
+    public void setTipoOrden(TipoOrden tipoOrden) {
+        this.tipoOrden = tipoOrden;
     }
 }

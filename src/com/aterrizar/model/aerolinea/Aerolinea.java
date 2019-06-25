@@ -125,7 +125,7 @@ public abstract class Aerolinea {
         }
     }
 
-    public Aerolinea OrdenarAsientosPor(TipoOrden tipoOrden) {
+    public Aerolinea ordenarAsientosPor(TipoOrden tipoOrden) {
         if(tipoOrden == null) {
             tipoOrden = TipoOrden.superOferta;
         }

@@ -111,6 +111,7 @@ public class Repositorio {
                             .buscarSuperOfertas(usuario)
                             .getVueloAsientos()
             );
+            this.vueloAsientos.sort(filtro.getTipoOrden()::sort);
         }
 
         usuario.agregarFiltroAlHistorial(filtro);

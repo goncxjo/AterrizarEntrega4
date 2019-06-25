@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -412,7 +411,7 @@ public class AerolineaOceanicProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.precioDescendente)
+                .ordenarAsientosPor(TipoOrden.precioDescendente)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 110.0, 100.0 };
@@ -439,7 +438,7 @@ public class AerolineaOceanicProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.precioAscendente)
+                .ordenarAsientosPor(TipoOrden.precioAscendente)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 200.0, 340.0 };
@@ -466,7 +465,7 @@ public class AerolineaOceanicProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaOceanicProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.tiempoVuelo)
+                .ordenarAsientosPor(TipoOrden.tiempoVuelo)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 15.0, 50.0 };
@@ -494,7 +493,7 @@ public class AerolineaOceanicProxyTest {
 
         List<VueloAsiento> vueloAsientosOrdenadosPorPopularidad = aerolineaOceanicProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.popularidad)
+                .ordenarAsientosPor(TipoOrden.popularidad)
                 .getVueloAsientos();
     	
         Double[] listaEsperada = { 4.0, 3.0 };

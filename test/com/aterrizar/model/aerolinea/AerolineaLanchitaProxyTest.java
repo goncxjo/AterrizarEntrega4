@@ -268,7 +268,7 @@ public class AerolineaLanchitaProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaLanchitaProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.precioDescendente)
+                .ordenarAsientosPor(TipoOrden.precioDescendente)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 2000.0, 1000.0, 500.0, 400.0, 400.0 };
@@ -300,7 +300,7 @@ public class AerolineaLanchitaProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaLanchitaProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.precioAscendente)
+                .ordenarAsientosPor(TipoOrden.precioAscendente)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 400.0, 400.0, 500.0, 1000.0, 2000.0 };
@@ -332,7 +332,7 @@ public class AerolineaLanchitaProxyTest {
 
         List<VueloAsiento> vueloAsientos = aerolineaLanchitaProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.tiempoVuelo)
+                .ordenarAsientosPor(TipoOrden.tiempoVuelo)
                 .getVueloAsientos();
 
         Double[] listaEsperada = { 10.0, 11.0, 12.0, 13.0, 18.0 };
@@ -364,7 +364,7 @@ public class AerolineaLanchitaProxyTest {
 
         List<VueloAsiento> vueloAsientosOrdenadosPorPopularidad = aerolineaLanchitaProxy
                 .filtrarAsientos(filtro, usuario)
-                .OrdenarAsientosPor(TipoOrden.popularidad)
+                .ordenarAsientosPor(TipoOrden.popularidad)
                 .getVueloAsientos();
     	
         Double[] listaEsperada = { 4.0, 3.0, 1.0, 0.0 };

@@ -2,6 +2,7 @@ package com.aterrizar.view;
 
 import com.aterrizar.controller.BuscarAsientoController;
 import com.aterrizar.enumerator.Destino;
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.exception.*;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
@@ -32,10 +33,12 @@ public class BuscarAsientoView extends LayoutView {
     private final JLabel origenLabel = new JLabel("Origen: ");
     private final JLabel destinoLabel = new JLabel("Destino: ");
     private final JLabel fechaLabel = new JLabel("Fecha: ");
+    private final JLabel tipoOrdenLabel = new JLabel("Ordenar por: ");
 
     private JComboBox<Destino> origenComboBox;
     private JComboBox<Destino> destinoComboBox;
     private final JTextField fechaTextField = new JTextField();
+    private JComboBox<TipoOrden> tipoOrdenComboBox;
 
     private final JTable resultadosTabla = new JTable();
 
@@ -60,6 +63,7 @@ public class BuscarAsientoView extends LayoutView {
         buscarButton.addActionListener(e -> onBuscar());
         comprarButton.addActionListener(e -> onComprar());
         reservarButton.addActionListener(e -> onReservar());
+
         cerrarButton.addActionListener(e -> onCerrar());
     }
 
@@ -125,14 +129,23 @@ public class BuscarAsientoView extends LayoutView {
                     (Destino) origenComboBox.getSelectedItem()
                     , (Destino) destinoComboBox.getSelectedItem()
                     , fechaTextField.getText()
+                    , (TipoOrden) tipoOrdenComboBox.getSelectedItem()
             );
             vm.buscarAsientosDisponibles();
 
             vueloAsientoTableModel = new VueloAsientoTableModel(vm.getVueloAsientos());
             resultadosTabla.setModel(vueloAsientoTableModel);
+            desactivarBotoneraOperaciones(true);
+
         } catch(ParametroVacioException | PatternDoesntMatchException | DestinosIgualesException | NoHayAsientosDisponiblesException e) {
             errorLabel.setText(e.getMessage());
+            desactivarBotoneraOperaciones(false);
         }
+    }
+
+    private void desactivarBotoneraOperaciones(boolean b) {
+        comprarButton.setEnabled(b);
+        reservarButton.setEnabled(b);
     }
 
     private void refrescarTabla() {
@@ -152,6 +165,8 @@ public class BuscarAsientoView extends LayoutView {
         botonesPanel.add(comprarButton);
         botonesPanel.add(reservarButton);
         botonesPanel.add(cerrarButton);
+
+        desactivarBotoneraOperaciones(false);
     }
 
     private void setAsientosPanel() {
@@ -191,7 +206,7 @@ public class BuscarAsientoView extends LayoutView {
         c.gridy = 0;
         c.gridwidth = 2;
         c.insets = new Insets(0,0,0,0);
-        origenComboBox = getComboBoxDestinos();
+        origenComboBox = getComboBox(Destino.getOrigenes());
         filtrosPanel.add(origenComboBox, c);
 
         c.gridx = 0;
@@ -204,7 +219,7 @@ public class BuscarAsientoView extends LayoutView {
         c.gridy = 1;
         c.gridwidth = 2;
         c.insets = new Insets(0,0,0,0);
-        destinoComboBox = getComboBoxDestinos();
+        destinoComboBox = getComboBox(Destino.getDestinos());
         filtrosPanel.add(destinoComboBox, c);
 
         c.gridx = 0;
@@ -217,26 +232,50 @@ public class BuscarAsientoView extends LayoutView {
         c.gridy = 2;
         c.gridwidth = 2;
         c.insets = new Insets(0,0,0,0);
-        filtrosPanel.add(fechaTextField, c);
         fechaTextField.setColumns(10);
+        filtrosPanel.add(fechaTextField, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 1;
+        c.insets = new Insets(0,0,0,PADDING_2);
+        filtrosPanel.add(tipoOrdenLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        c.insets = new Insets(0,0,0,0);
+        tipoOrdenComboBox = getComboBox(TipoOrden.values());
+        filtrosPanel.add(tipoOrdenComboBox, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 0;                            //reset to default
         c.anchor = GridBagConstraints.PAGE_END; //bottom of space
         c.gridx = 0;                            //aligned
-        c.gridy = 3;
+        c.gridy = 4;
         filtrosPanel.add(buscarButton, c);
 
         asientosPanel.add(filtrosPanel);
     }
 
-    private JComboBox<Destino> getComboBoxDestinos() {
+    private JComboBox getComboBox(Destino[] destinos) {
         JComboBox<Destino> jComboBox = new JComboBox<>();
 
-        jComboBox.setModel(new DefaultComboBoxModel(Destino.values()));
+        jComboBox.setModel(new DefaultComboBoxModel(destinos));
         jComboBox.setSelectedIndex(0);
         jComboBox.setBackground(Color.WHITE);
         jComboBox.setRenderer(new DestinoComboRenderer());
+
+        return jComboBox;
+    }
+
+    private JComboBox getComboBox(TipoOrden[] tiposOrden) {
+        JComboBox<TipoOrden> jComboBox = new JComboBox<>();
+
+        jComboBox.setModel(new DefaultComboBoxModel(tiposOrden));
+        jComboBox.setSelectedIndex(0);
+        jComboBox.setBackground(Color.WHITE);
+        jComboBox.setRenderer(new TipoOrdenComboRenderer());
 
         return jComboBox;
     }

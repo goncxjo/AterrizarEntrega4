@@ -3,8 +3,8 @@ package com.aterrizar.enumerator.vueloasiento;
 import com.aterrizar.model.vueloasiento.VueloAsiento;
 
 public enum TipoOrden {
-    superOferta
-    , precioAscendente {
+    superOferta("Super oferta")
+    , precioAscendente("Precio (ascendente)") {
 
         @Override
         public int sort(VueloAsiento asientoIzquierda, VueloAsiento asientoDerecha) {
@@ -15,7 +15,7 @@ public enum TipoOrden {
             );
         }
     }
-    , precioDescendente {
+    , precioDescendente("Precio (descendente)") {
         @Override
         public int sort(VueloAsiento asientoIzquierda, VueloAsiento asientoDerecha) {
             return super.ordenarPorTipoOPorSuperOferta(
@@ -25,7 +25,7 @@ public enum TipoOrden {
             );
         }
     }
-    , tiempoVuelo {
+    , tiempoVuelo("Tiempo de vuelo") {
     	@Override
     	public int sort(VueloAsiento asientoIzquierda, VueloAsiento asientoDerecha) {
             return super.ordenarPorTipoOPorSuperOferta(
@@ -35,7 +35,7 @@ public enum TipoOrden {
             );
     	}
     }
-    , popularidad {
+    , popularidad("Popularidad") {
     	@Override
     	public int sort(VueloAsiento asientoIzquierda, VueloAsiento asientoDerecha) {
             return super.ordenarPorTipoOPorSuperOferta(
@@ -45,6 +45,16 @@ public enum TipoOrden {
             );
     	}
     };
+
+    private String nombre;
+
+    TipoOrden(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
 
     public int sort(VueloAsiento asientoIzq, VueloAsiento asientoDer) {
         if(asientoIzq.getAsiento().esSuperOferta()) {

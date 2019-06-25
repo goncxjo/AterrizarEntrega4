@@ -1,6 +1,7 @@
 package com.aterrizar.viewmodel;
 
 import com.aterrizar.enumerator.Destino;
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.exception.*;
 import com.aterrizar.model.aterrizar.Repositorio;
 import com.aterrizar.model.usuario.Usuario;
@@ -36,11 +37,12 @@ public class BuscarAsientoViewModel {
         this.filtro = filtro;
     }
 
-    public void setFiltro(Destino origen, Destino destino, String fecha) {
+    public void setFiltro(Destino origen, Destino destino, String fecha, TipoOrden tipoOrden) {
         this.filtro = new VueloAsientoFiltroBuilder()
                 .agregarOrigen(origen)
                 .agregarDestino(destino)
                 .agregarFecha(fecha)
+                .agregarTipoOrden(tipoOrden)
                 .build();
     }
 
@@ -88,7 +90,6 @@ public class BuscarAsientoViewModel {
     }
 
     public void sobrereservarVueloAsientoSeleccionado() {
-        // TODO: PENDIENTE MERGE
-        //repositorio.sobrereservar(vueloAsiento);
+        repositorio.sobrereservar(vueloAsiento, usuario);
     }
 }

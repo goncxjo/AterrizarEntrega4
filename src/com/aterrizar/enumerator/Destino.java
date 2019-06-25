@@ -22,4 +22,12 @@ public enum Destino {
     public String getCodigoYNombre() {
         return this.name() + " - " + nombre + " (" + pais + ")";
     }
+
+    public static Destino[] getOrigenes() {
+        return new Destino[] { Destino.BUE, Destino.EZE };
+    }
+
+    public static Destino[] getDestinos() {
+        return new Destino[] { Destino.LA, Destino.BCN, Destino.MAD, Destino.TOK, Destino.BSB, Destino.MIA, Destino.MEX };
+    }
 }

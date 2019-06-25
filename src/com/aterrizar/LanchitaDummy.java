@@ -39,7 +39,7 @@ public class LanchitaDummy implements AerolineaLanchita {
     public List<List<String>> asientosDisponibles(String origen, String fechaSalida, String destino, String fechaLlegada) {
         return this.asientos
                 .stream()
-                .filter(x -> contiene(x, destino) && x.get(4).equals("D"))
+                .filter(x -> contiene(x, destino) && (x.get(4).equals("D") || x.get(4).equals("R")))
                 .collect(Collectors.toList());
     }
 

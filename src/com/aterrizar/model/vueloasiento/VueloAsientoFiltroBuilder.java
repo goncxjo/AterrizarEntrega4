@@ -2,6 +2,7 @@ package com.aterrizar.model.vueloasiento;
 
 import com.aterrizar.enumerator.Destino;
 import com.aterrizar.enumerator.Ubicacion;
+import com.aterrizar.enumerator.vueloasiento.TipoOrden;
 import com.aterrizar.model.asiento.Asiento;
 
 public class VueloAsientoFiltroBuilder {
@@ -33,6 +34,11 @@ public class VueloAsientoFiltroBuilder {
 
     public VueloAsientoFiltroBuilder agregarUbicacion(Ubicacion ubicacion) {
         filtro.setUbicacion(ubicacion);
+        return this;
+    }
+
+    public VueloAsientoFiltroBuilder agregarTipoOrden(TipoOrden tipoOrden) {
+        filtro.setTipoOrden(tipoOrden);
         return this;
     }
     
