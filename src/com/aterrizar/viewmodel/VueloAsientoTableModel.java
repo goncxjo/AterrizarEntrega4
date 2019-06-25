@@ -15,9 +15,10 @@ public class VueloAsientoTableModel extends AbstractTableModel {
             , "Precio"
             , "Ubicación"
             , "Clase"
+            , "Super oferta"
     };
 
-    Class[] classes = { String.class, String.class, String.class, Double.class, String.class, String.class };
+    Class[] classes = { String.class, String.class, String.class, Double.class, String.class, String.class, String.class };
 
     public VueloAsientoTableModel() {
         asientosList = new ArrayList<>();
@@ -47,6 +48,8 @@ public class VueloAsientoTableModel extends AbstractTableModel {
                 return entity.getAsiento().getUbicacion();
             case 5:
                 return entity.getAsiento().getNombreTipoAsiento();
+            case 6:
+                return entity.getAsiento().esSuperOferta() ? "Sí" : "No";
             default:
                 return "";
         }
