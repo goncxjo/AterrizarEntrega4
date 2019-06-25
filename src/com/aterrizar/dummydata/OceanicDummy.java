@@ -1,4 +1,4 @@
-package com.aterrizar;
+package com.aterrizar.dummydata;
 
 import com.aterrizar.enumerator.Ubicacion;
 import com.aterrizar.model.aerolinea.AerolineaOceanic;

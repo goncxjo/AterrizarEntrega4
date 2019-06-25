@@ -1,6 +1,6 @@
 package com.aterrizar.view;
 
-import com.aterrizar.DummyData;
+import com.aterrizar.dummydata.DummyData;
 import com.aterrizar.controller.BienvenidaController;
 import com.aterrizar.viewmodel.BienvenidaViewModel;
 import com.aterrizar.viewmodel.UsuarioComprasViewModel;

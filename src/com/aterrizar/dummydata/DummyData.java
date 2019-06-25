@@ -1,4 +1,4 @@
-package com.aterrizar;
+package com.aterrizar.dummydata;
 
 import com.aterrizar.model.aerolinea.Aerolinea;
 import com.aterrizar.model.aerolinea.AerolineaLanchitaProxy;

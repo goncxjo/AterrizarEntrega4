@@ -1,4 +1,4 @@
-package com.aterrizar;
+package com.aterrizar.dummydata;
 
 import com.aterrizar.exception.AsientoLanchitaNoDisponibleException;
 import com.aterrizar.exception.AsientoLanchitaYaReservadoException;
